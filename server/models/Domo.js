@@ -10,29 +10,9 @@ let DomoModel = {};
 const convertId = mongoose.Types.ObjectId;
 const setString = (str) => _.escape(str).trim();
 
-const classSchema = new mongoose.Schema({
-  className: {
-    type: String,
-    required: true,
-    trim: true,
-    set: setString,
-  },
-
-  classLevel: {
-    type: Number,
-    min: 1,
-    max: 20,
-    required: true,
-  }
-});
 
 const spellSchema = new mongoose.Schema({
-  spellName: {
-    type: String,
-    required: true,
-    trim: true,
-    set: setString,
-  },
+  
 });
 
 const DomoSchema = new mongoose.Schema({
@@ -94,13 +74,30 @@ const DomoSchema = new mongoose.Schema({
     },
   },
 
-  classes: {
-    type: [classSchema],
-  },
+  classes: [{
+      className: {
+      type: String,
+      required: true,
+      trim: true,
+      set: setString,
+      },
+  
+    classLevel: {
+      type: Number,
+      min: 1,
+      max: 20,
+      required: true,
+    }
+  }],
 
-  spells: {
-    type: [spellSchema],
-  },
+  spells: [{
+      spellName: {
+        type: String,
+        required: true,
+        trim: true,
+        set: setString,
+      },
+  }],
 
   owner: {
     type: mongoose.Schema.ObjectId,

@@ -40,6 +40,23 @@ const DomoForm = (props) => {
               <option value="Half-Orc">Half-Orc</option>
               <option value="Tiefling">Tiefling</option>
             </select>
+            <div id="classesField" name="classes">
+            <select id="classField" name="className">
+              <option value="Barbarian">Barbarian</option>
+              <option value="Bard">Bard</option>
+              <option value="Cleric">Cleric</option>
+              <option value="Druid">Druid</option>
+              <option value="Fighter">Fighter</option>
+              <option value="Monk">Monk</option>
+              <option value="Paladin">Paladin</option>
+              <option value="Ranger">Ranger</option>
+              <option value="Rogue">Rogue</option>
+              <option value="Sorcerer">Sorcerer</option>
+              <option value="Warlock">Warlock</option>
+              <option value="Wizard">Wizard</option>
+            </select>
+            <input name="classLevel" type="number" />
+            </div>
             <input type="hidden" name="_csrf" value={props.csrf} />
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
@@ -73,6 +90,34 @@ const DomoList = function(props){
     );
 };
 
+const AddClass = (props) => {
+    return(
+        <button onClick={makeNewClass}>+</button>
+    );
+};
+
+const NewClass = (props) => {
+    return(
+        <div>
+        <select id="classField" className="className">
+              <option value="Barbarian">Barbarian</option>
+              <option value="Bard">Bard</option>
+              <option value="Cleric">Cleric</option>
+              <option value="Druid">Druid</option>
+              <option value="Fighter">Fighter</option>
+              <option value="Monk">Monk</option>
+              <option value="Paladin">Paladin</option>
+              <option value="Ranger">Ranger</option>
+              <option value="Rogue">Rogue</option>
+              <option value="Sorcerer">Sorcerer</option>
+              <option value="Warlock">Warlock</option>
+              <option value="Wizard">Wizard</option>
+        </select>
+        <input className="classLevel" type="number" />
+        </div>
+    );
+};
+
 const loadDomosFromServer = () => {
     sendAjax('GET', '/getDomos', null, (data) => {
         ReactDOM.render(
@@ -92,6 +137,14 @@ const setup = function(csrf){
 
     loadDomosFromServer();
 };
+
+const makeNewClass = function(csrf){
+    setup();
+    
+    ReactDOM.render(
+        <NewClass />, document.querySelector("#classesField")
+    );
+}
 
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result) => {
