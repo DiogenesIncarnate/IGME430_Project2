@@ -24,6 +24,8 @@ const DomoForm = (props) => {
         method="POST"
         className="domoForm"
         >
+            <label htmlFor="_id">ID: </label>
+            <input id="idField" type="text" name="_id" placeholder="Character ID"/>
             <label htmlFor="name">Name: </label>
             <input id="domoName" type="text" name="name" placeholder="Domo Name" />
             <label htmlFor="age">Age: </label>
@@ -41,7 +43,8 @@ const DomoForm = (props) => {
               <option value="Tiefling">Tiefling</option>
             </select>
             <div id="classesField" name="classes">
-            <select id="classField" name="className">
+            <label htmlFor="className">Class: </label>
+            <select id="classNameField" name="className">
               <option value="Barbarian">Barbarian</option>
               <option value="Bard">Bard</option>
               <option value="Cleric">Cleric</option>
@@ -55,7 +58,8 @@ const DomoForm = (props) => {
               <option value="Warlock">Warlock</option>
               <option value="Wizard">Wizard</option>
             </select>
-            <input name="classLevel" type="number" />
+            <label htmlFor="classLevel">Class Level: </label>
+            <input id="classLevelField" name="classLevel" type="number" min="1" max="20"/>
             </div>
             <button onClick={makeNewClass}>+</button>
             <input type="hidden" name="_csrf" value={props.csrf} />
@@ -80,6 +84,9 @@ const DomoList = function(props){
                 <h3 className="domoName">Name: {domo.name}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
                 <h3 className="raceField">Race: {domo.race}</h3>
+                <h3 className="classNameField">Race: {domo.className}</h3>
+                <h3 className="classLevelField">Race: {domo.classLevel}</h3>
+                <h3 className="idField">ID: {domo._id}</h3>
             </div>
         );
     });
@@ -87,34 +94,6 @@ const DomoList = function(props){
     return (
         <div className="domoList">
             {domoNodes}
-        </div>
-    );
-};
-
-const AddClass = (props) => {
-    return(
-        <button onClick={makeNewClass}>+</button>
-    );
-};
-
-const NewClass = (props) => {
-    return(
-        <div className={props.classes[0]}>
-        <select id="classField" className={props.classes[0].className}>
-              <option value="Barbarian">Barbarian</option>
-              <option value="Bard">Bard</option>
-              <option value="Cleric">Cleric</option>
-              <option value="Druid">Druid</option>
-              <option value="Fighter">Fighter</option>
-              <option value="Monk">Monk</option>
-              <option value="Paladin">Paladin</option>
-              <option value="Ranger">Ranger</option>
-              <option value="Rogue">Rogue</option>
-              <option value="Sorcerer">Sorcerer</option>
-              <option value="Warlock">Warlock</option>
-              <option value="Wizard">Wizard</option>
-        </select>
-        <input className={props.classes[0].classLevel} type="number" />
         </div>
     );
 };
@@ -137,16 +116,6 @@ const setup = function(csrf){
     );
 
     loadDomosFromServer();
-};
-
-const makeNewClass = function(csrf){
-    ReactDOM.render(
-        <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")  
-    );
-
-    ReactDOM.render(
-        <NewClass />, document.querySelector("#classesField")
-    );
 };
 
 const getToken = () => {

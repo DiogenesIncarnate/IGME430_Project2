@@ -30,6 +30,13 @@ const makeDomo = (req, res) => {
 
   const newDomo = new Domo.DomoModel(domoData);
 
+  if(req.body._id){
+    newDomo = DomoModel.findOneAndUpdate(
+      {_id: req.body._id},
+      {new: true}
+    );
+  }
+
   const domoPromise = newDomo.save();
 
   domoPromise.then(() => res.json({ redirect: '/maker' }));

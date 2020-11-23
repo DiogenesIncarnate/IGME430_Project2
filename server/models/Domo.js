@@ -69,7 +69,6 @@ const DomoSchema = new mongoose.Schema({
     },
   },
 
-  classes: [{
     className: {
       type: String,
       required: true,
@@ -83,7 +82,6 @@ const DomoSchema = new mongoose.Schema({
       max: 20,
       required: true,
     },
-  }],
 
   spells: [{
     spellName: {
@@ -111,7 +109,8 @@ DomoSchema.statics.toAPI = (doc) => ({
   age: doc.age,
   race: doc.race,
   baseAbilities: doc.baseAbilities,
-  classes: doc.classes,
+  className: doc.className,
+  classLevel: doc.classLevel,
   spells: doc.spells,
 });
 
