@@ -99,8 +99,8 @@ const AddClass = (props) => {
 
 const NewClass = (props) => {
     return(
-        <div>
-        <select id="classField" className="className">
+        <div className={props.classes[0]}>
+        <select id="classField" className={props.classes[0].className}>
               <option value="Barbarian">Barbarian</option>
               <option value="Bard">Bard</option>
               <option value="Cleric">Cleric</option>
@@ -114,7 +114,7 @@ const NewClass = (props) => {
               <option value="Warlock">Warlock</option>
               <option value="Wizard">Wizard</option>
         </select>
-        <input className="classLevel" type="number" />
+        <input className={props.classes[0].classLevel} type="number" />
         </div>
     );
 };
@@ -140,12 +140,14 @@ const setup = function(csrf){
 };
 
 const makeNewClass = function(csrf){
-    setup();
+    ReactDOM.render(
+        <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")  
+    );
 
     ReactDOM.render(
         <NewClass />, document.querySelector("#classesField")
     );
-}
+};
 
 const getToken = () => {
     sendAjax('GET', '/getToken', null, (result) => {
