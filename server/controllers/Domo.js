@@ -28,12 +28,12 @@ const makeDomo = (req, res) => {
     owner: req.session.account._id,
   };
 
-  const newDomo = new Domo.DomoModel(domoData);
+  let newDomo = new Domo.DomoModel(domoData);
 
-  if(req.body._id){
-    newDomo = DomoModel.findOneAndUpdate(
-      {_id: req.body._id},
-      {new: true}
+  if (req.body._id) {
+    newDomo = Domo.DomoModel.findOneAndUpdate(
+      { _id: req.body._id },
+      { new: true },
     );
   }
 

@@ -69,19 +69,19 @@ const DomoSchema = new mongoose.Schema({
     },
   },
 
-    className: {
-      type: String,
-      required: true,
-      trim: true,
-      set: setString,
-    },
+  className: {
+    type: String,
+    required: true,
+    trim: true,
+    set: setString,
+  },
 
-    classLevel: {
-      type: Number,
-      min: 1,
-      max: 20,
-      required: true,
-    },
+  classLevel: {
+    type: Number,
+    min: 1,
+    max: 20,
+    required: true,
+  },
 
   spells: [{
     spellName: {
