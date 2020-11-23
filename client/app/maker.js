@@ -57,6 +57,7 @@ const DomoForm = (props) => {
             </select>
             <input name="classLevel" type="number" />
             </div>
+            <button onClick={makeNewClass}>+</button>
             <input type="hidden" name="_csrf" value={props.csrf} />
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
@@ -140,7 +141,7 @@ const setup = function(csrf){
 
 const makeNewClass = function(csrf){
     setup();
-    
+
     ReactDOM.render(
         <NewClass />, document.querySelector("#classesField")
     );
