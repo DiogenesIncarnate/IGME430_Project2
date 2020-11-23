@@ -61,7 +61,6 @@ const DomoForm = (props) => {
             <label htmlFor="classLevel">Class Level: </label>
             <input id="classLevelField" name="classLevel" type="number" min="1" max="20"/>
             </div>
-            <button onClick={makeNewClass}>+</button>
             <input type="hidden" name="_csrf" value={props.csrf} />
             <input className="makeDomoSubmit" type="submit" value="Make Domo" />
         </form>
