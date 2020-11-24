@@ -3,15 +3,15 @@
 var handleCharacter = function handleCharacter(e) {
   e.preventDefault();
   $("characterMessage").animate({
-    width: 'hide'
+    width: "hide"
   }, 350);
 
-  if ($("characterName").val() == '' || $("#characterAge").val() == '') {
+  if ($("characterName").val() == "" || $("#characterAge").val() == "") {
     handleError("RAWR! All fields are required.");
     return false;
   }
 
-  sendAjax('POST', $("#characterForm").attr("action"), $("#characterForm").serialize(), function () {
+  sendAjax("POST", $("#characterForm").attr("action"), $("#characterForm").serialize(), function () {
     loadCharactersFromServer();
   });
   return false;
@@ -99,42 +99,42 @@ var CharacterForm = function CharacterForm(props) {
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_strength"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
     name: "base_strength",
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_dexterity"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
     name: "base_dexterity",
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_constitution"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
     name: "base_constitution",
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_wisdom"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
     name: "base_wisdom",
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+  }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_charisma"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
     name: "base_charisma",
     type: "number",
     min: "1",
     max: "20"
-  })))), /*#__PURE__*/React.createElement("input", {
+  })), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
@@ -190,7 +190,7 @@ var CharacterList = function CharacterList(props) {
 };
 
 var loadCharactersFromServer = function loadCharactersFromServer() {
-  sendAjax('GET', '/getCharacters', null, function (data) {
+  sendAjax("GET", "/getCharacters", null, function (data) {
     ReactDOM.render( /*#__PURE__*/React.createElement(CharacterList, {
       characters: data.characters
     }), document.querySelector("#characters"));
@@ -208,7 +208,7 @@ var setup = function setup(csrf) {
 };
 
 var getToken = function getToken() {
-  sendAjax('GET', '/getToken', null, function (result) {
+  sendAjax("GET", "/getToken", null, function (result) {
     setup(result.csrfToken);
   });
 };

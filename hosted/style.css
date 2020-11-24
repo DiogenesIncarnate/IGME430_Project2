@@ -60,6 +60,7 @@ nav:nth-child(1) {
 
 .characterForm label {
     float:left;
+    margin: 1vw;
     width: 5vw;
     font-size: 1vw;
     color: white;
@@ -67,9 +68,17 @@ nav:nth-child(1) {
 
 .characterForm input, select {
     float:left;
-    width: 5vw;
+    width: 10vw;
     font-size: 1vw;
     border: 0.5vw black;
+}
+
+.characterForm select {
+    width: 5vw;
+}
+
+.characterForm input[type=number]{
+    width: 2vw;
 }
 
 .makeCharacterSubmit {
