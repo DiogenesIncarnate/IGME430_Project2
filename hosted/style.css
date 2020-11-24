@@ -81,11 +81,6 @@ nav:nth-child(1) {
     width: 2vw;
 }
 
-#characterBaseAbilities input, #characterBaseAbilities label{
-    width: 15%;
-    margin: auto 5%;
-}
-
 .makeCharacterSubmit {
     transition: background-color 0.4s ease;
     display: inline;
@@ -232,6 +227,11 @@ nav:nth-child(1) {
     border-color: rgba(0,0,0, 0.8);
     transition: background-color 2.6s ease-out;
     background-color: darkgrey;
+}
+
+.character span{
+    width: 15%;
+    margin: auto 5%;
 }
 
 img.characterFace {
