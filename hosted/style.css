@@ -59,10 +59,10 @@ nav:nth-child(1) {
 }
 
 .characterForm label {
-    display: inline-block;
-    width: 75px;
+    float:left;
+    width: 5vw;
     margin-left: 10px;
-    font-size: 1.2em;
+    font-size: 1vw;
     color: white;
 }
 

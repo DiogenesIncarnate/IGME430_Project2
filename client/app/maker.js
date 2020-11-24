@@ -15,11 +15,6 @@ const handleCharacter = (e) => {
     return false;
 };
 
-const toggleExpandCharacter = (e) => {
-    if(e.target.style.height !== '20v') e.target.style.height = '20v';
-    else e.target.style.height = '30v';
-};
-
 const CharacterForm = (props) => {
     return (
         <form id="characterForm"
@@ -79,7 +74,7 @@ const CharacterList = function(props){
 
     const characterNodes = props.characters.map(function(character){
         return (
-            <div key={character._id} className="character" onClick={toggleExpandCharacter}>
+            <div key={character._id} className="character">
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="characterFace" />
                 <h3 className="characterName">Name: {character.name}</h3>
                 <h3 className="characterAge">Age: {character.age}</h3>
