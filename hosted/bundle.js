@@ -103,7 +103,7 @@ var CharacterForm = function CharacterForm(props) {
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", {
+  })), /*#__PURE__*/React.createElement("div", {
     className: "characterForm_Section"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_strength"

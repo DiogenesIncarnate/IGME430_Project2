@@ -83,7 +83,6 @@ const CharacterForm = (props) => {
           max="20"
         />
       </div>
-      <br/>
       <div className="characterForm_Section">
         <label htmlFor="base_strength">Strength: </label>
         <input name="base_strength" type="number" min="1" max="20" />
