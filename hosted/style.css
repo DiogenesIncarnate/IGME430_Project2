@@ -66,8 +66,11 @@ nav:nth-child(1) {
     color: white;
 }
 
-.characterForm input {
+.characterForm input, select {
     float:left;
+    width: 5vw;
+    font-size: 1vw;
+    border: 0.5vw black;
 }
 
 .makeCharacterSubmit {
