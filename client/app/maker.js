@@ -24,8 +24,6 @@ const DomoForm = (props) => {
         method="POST"
         className="domoForm"
         >
-            <label htmlFor="_id">ID: </label>
-            <input id="idField" type="text" name="_id" placeholder="Character ID"/>
             <label htmlFor="name">Name: </label>
             <input id="domoName" type="text" name="name" placeholder="Domo Name" />
             <label htmlFor="age">Age: </label>

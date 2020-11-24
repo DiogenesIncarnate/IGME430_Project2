@@ -28,11 +28,11 @@ const makeDomo = (req, res) => {
     owner: req.session.account._id,
   };
 
-  let newDomo = new Domo.DomoModel(domoData);
-
-  if (req.body._id) {
-    newDomo = Domo.DomoModel.findByIdAndUpdate(req.body._id, domoData, { upsert: true });
-  }
+  const filter = { name: req.body.name };
+  const newDomo = Domo.DomoModel.findAndUpdate(filter, domoData, {
+    new: true,
+    upsert: true,
+  });
 
   const domoPromise = newDomo.save();
 
