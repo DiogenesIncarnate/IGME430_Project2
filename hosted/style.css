@@ -82,6 +82,11 @@ nav:nth-child(1) {
     width: 2vw;
 }
 
+.characterForm_Section {
+    width: 90%;
+    padding: 0 5%;
+}
+
 .makeCharacterSubmit {
     transition: background-color 0.4s ease;
     display: inline;
@@ -230,12 +235,6 @@ nav:nth-child(1) {
     background-color: darkgrey;
 }
 
-.character h3{
-    width: 15%;
-    margin: auto 5%;
-    text-align: center;
-}
-
 img.characterFace {
     margin-left: 25px;
     margin-right: 10px;
@@ -248,9 +247,7 @@ img.characterFace {
 
 .character h3 {
     float: left;
-    width: 20%;
+    width: 15%;
     font-size: 1.5em;
-    margin: 0 auto;
     text-align: center;
-    margin: 10%;
 }

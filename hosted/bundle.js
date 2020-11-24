@@ -25,7 +25,9 @@ var CharacterForm = function CharacterForm(props) {
     action: "/maker",
     method: "POST",
     className: "characterForm"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "name"
   }, "Name: "), /*#__PURE__*/React.createElement("input", {
     id: "characterName",
@@ -62,7 +64,9 @@ var CharacterForm = function CharacterForm(props) {
     value: "Half-Orc"
   }, "Half-Orc"), /*#__PURE__*/React.createElement("option", {
     value: "Tiefling"
-  }, "Tiefling"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+  }, "Tiefling"))), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "className"
   }, "Class: "), /*#__PURE__*/React.createElement("select", {
     id: "characterClassName",
@@ -99,8 +103,8 @@ var CharacterForm = function CharacterForm(props) {
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("div", {
-    id: "characterBaseAbilities"
+  })), /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_strength"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {

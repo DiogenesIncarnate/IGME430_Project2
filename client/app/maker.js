@@ -30,7 +30,7 @@ const CharacterForm = (props) => {
       method="POST"
       className="characterForm"
     >
-      <div>
+      <div className="characterForm_Section">
         <label htmlFor="name">Name: </label>
         <input
           id="characterName"
@@ -58,7 +58,7 @@ const CharacterForm = (props) => {
           <option value="Tiefling">Tiefling</option>
         </select>
       </div>
-      <div>
+      <div className="characterForm_Section">
         <label htmlFor="className">Class: </label>
         <select id="characterClassName" name="className">
           <option value="Barbarian">Barbarian</option>
@@ -83,7 +83,8 @@ const CharacterForm = (props) => {
           max="20"
         />
       </div>
-      <div id="characterBaseAbilities">
+      <br/>
+      <div className="characterForm_Section">
         <label htmlFor="base_strength">Strength: </label>
         <input name="base_strength" type="number" min="1" max="20" />
         <label htmlFor="base_dexterity">Dexterity: </label>
