@@ -2,7 +2,7 @@
 
 var handleCharacter = function handleCharacter(e) {
   e.preventDefault();
-  $("domoMessage").animate({
+  $("characterMessage").animate({
     width: 'hide'
   }, 350);
 
@@ -126,7 +126,7 @@ var CharacterList = function CharacterList(props) {
     }, /*#__PURE__*/React.createElement("img", {
       src: "/assets/img/domoface.jpeg",
       alt: "domo face",
-      className: "domoFace"
+      className: "characterFace"
     }), /*#__PURE__*/React.createElement("h3", {
       className: "characterName"
     }, "Name: ", character.name), /*#__PURE__*/React.createElement("h3", {
