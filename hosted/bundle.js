@@ -99,7 +99,9 @@ var CharacterForm = function CharacterForm(props) {
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    id: "characterBaseAbilities"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_strength"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
     name: "base_strength",
@@ -108,28 +110,28 @@ var CharacterForm = function CharacterForm(props) {
     max: "20"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_dexterity"
-  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+  }, "Dexterity: "), /*#__PURE__*/React.createElement("input", {
     name: "base_dexterity",
     type: "number",
     min: "1",
     max: "20"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_constitution"
-  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+  }, "Constitution: "), /*#__PURE__*/React.createElement("input", {
     name: "base_constitution",
     type: "number",
     min: "1",
     max: "20"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_wisdom"
-  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+  }, "Wisdom: "), /*#__PURE__*/React.createElement("input", {
     name: "base_wisdom",
     type: "number",
     min: "1",
     max: "20"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_charisma"
-  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+  }, "Charisma: "), /*#__PURE__*/React.createElement("input", {
     name: "base_charisma",
     type: "number",
     min: "1",
@@ -172,15 +174,17 @@ var CharacterList = function CharacterList(props) {
       className: "characterClassName"
     }, "Class: ", character.className, ", ", character.classLevel), /*#__PURE__*/React.createElement("h3", {
       className: "idField"
-    }, "ID: ", character._id), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", {
+    }, "ID: ", character._id), /*#__PURE__*/React.createElement("div", {
+      id: "characterAbilities"
+    }, /*#__PURE__*/React.createElement("span", {
       className: "base_strength"
-    }, "Str: ", character.base_strength), /*#__PURE__*/React.createElement("li", {
+    }, "Str: ", character.base_strength), /*#__PURE__*/React.createElement("span", {
       className: "base_dexterity"
-    }, "Dex: ", character.base_dexterity), /*#__PURE__*/React.createElement("li", {
+    }, "Dex: ", character.base_dexterity), /*#__PURE__*/React.createElement("span", {
       className: "base_constitution"
-    }, "Con: ", character.base_constitution), /*#__PURE__*/React.createElement("li", {
+    }, "Con: ", character.base_constitution), /*#__PURE__*/React.createElement("span", {
       className: "base_wisdom"
-    }, "Wis: ", character.base_wisdom), /*#__PURE__*/React.createElement("li", {
+    }, "Wis: ", character.base_wisdom), /*#__PURE__*/React.createElement("span", {
       className: "base_charisma"
     }, "Cha: ", character.base_charisma)));
   });

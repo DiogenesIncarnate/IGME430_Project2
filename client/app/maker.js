@@ -83,16 +83,16 @@ const CharacterForm = (props) => {
           max="20"
         />
       </div>
-      <div>
+      <div id="characterBaseAbilities">
         <label htmlFor="base_strength">Strength: </label>
         <input name="base_strength" type="number" min="1" max="20" />
-        <label htmlFor="base_dexterity">Strength: </label>
+        <label htmlFor="base_dexterity">Dexterity: </label>
         <input name="base_dexterity" type="number" min="1" max="20" />
-        <label htmlFor="base_constitution">Strength: </label>
+        <label htmlFor="base_constitution">Constitution: </label>
         <input name="base_constitution" type="number" min="1" max="20" />
-        <label htmlFor="base_wisdom">Strength: </label>
+        <label htmlFor="base_wisdom">Wisdom: </label>
         <input name="base_wisdom" type="number" min="1" max="20" />
-        <label htmlFor="base_charisma">Strength: </label>
+        <label htmlFor="base_charisma">Charisma: </label>
         <input name="base_charisma" type="number" min="1" max="20" />
       </div>
       <input type="hidden" name="_csrf" value={props.csrf} />
@@ -129,15 +129,17 @@ const CharacterList = function (props) {
           Class: {character.className}, {character.classLevel}
         </h3>
         <h3 className="idField">ID: {character._id}</h3>
-        <ul>
-          <li className="base_strength">Str: {character.base_strength}</li>
-          <li className="base_dexterity">Dex: {character.base_dexterity}</li>
-          <li className="base_constitution">
+        <div id="characterAbilities">
+          <span className="base_strength">Str: {character.base_strength}</span>
+          <span className="base_dexterity">
+            Dex: {character.base_dexterity}
+          </span>
+          <span className="base_constitution">
             Con: {character.base_constitution}
-          </li>
-          <li className="base_wisdom">Wis: {character.base_wisdom}</li>
-          <li className="base_charisma">Cha: {character.base_charisma}</li>
-        </ul>
+          </span>
+          <span className="base_wisdom">Wis: {character.base_wisdom}</span>
+          <span className="base_charisma">Cha: {character.base_charisma}</span>
+        </div>
       </div>
     );
   });
