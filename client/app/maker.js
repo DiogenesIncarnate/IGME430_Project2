@@ -130,15 +130,15 @@ const CharacterList = function (props) {
         </h3>
         <h3 className="idField">ID: {character._id}</h3>
         <div id="characterAbilities">
-          <span className="base_strength">Str: {character.base_strength}</span>
-          <span className="base_dexterity">
+          <h3 className="base_strength">Str: {character.base_strength}</h3>
+          <h3 className="base_dexterity">
             Dex: {character.base_dexterity}
-          </span>
-          <span className="base_constitution">
+          </h3>
+          <h3 className="base_constitution">
             Con: {character.base_constitution}
-          </span>
-          <span className="base_wisdom">Wis: {character.base_wisdom}</span>
-          <span className="base_charisma">Cha: {character.base_charisma}</span>
+          </h3>
+          <h3 className="base_wisdom">Wis: {character.base_wisdom}</h3>
+          <h3 className="base_charisma">Cha: {character.base_charisma}</h3>
         </div>
       </div>
     );

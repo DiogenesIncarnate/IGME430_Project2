@@ -176,15 +176,15 @@ var CharacterList = function CharacterList(props) {
       className: "idField"
     }, "ID: ", character._id), /*#__PURE__*/React.createElement("div", {
       id: "characterAbilities"
-    }, /*#__PURE__*/React.createElement("span", {
+    }, /*#__PURE__*/React.createElement("h3", {
       className: "base_strength"
-    }, "Str: ", character.base_strength), /*#__PURE__*/React.createElement("span", {
+    }, "Str: ", character.base_strength), /*#__PURE__*/React.createElement("h3", {
       className: "base_dexterity"
-    }, "Dex: ", character.base_dexterity), /*#__PURE__*/React.createElement("span", {
+    }, "Dex: ", character.base_dexterity), /*#__PURE__*/React.createElement("h3", {
       className: "base_constitution"
-    }, "Con: ", character.base_constitution), /*#__PURE__*/React.createElement("span", {
+    }, "Con: ", character.base_constitution), /*#__PURE__*/React.createElement("h3", {
       className: "base_wisdom"
-    }, "Wis: ", character.base_wisdom), /*#__PURE__*/React.createElement("span", {
+    }, "Wis: ", character.base_wisdom), /*#__PURE__*/React.createElement("h3", {
       className: "base_charisma"
     }, "Cha: ", character.base_charisma)));
   });

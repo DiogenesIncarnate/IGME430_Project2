@@ -63,6 +63,7 @@ nav:nth-child(1) {
     margin: auto 0.5vw;
     width: 5vw;
     font-size: 1vw;
+    text-align: center;
     color: white;
 }
 
@@ -229,9 +230,10 @@ nav:nth-child(1) {
     background-color: darkgrey;
 }
 
-.character span{
+.character h3{
     width: 15%;
     margin: auto 5%;
+    text-align: center;
 }
 
 img.characterFace {
