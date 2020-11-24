@@ -1,3 +1,5 @@
+import Button from 'react-bootstrap/Button';
+
 const handleCharacter = (e) => {
     e.preventDefault();
 
@@ -58,7 +60,7 @@ const CharacterForm = (props) => {
             <label htmlFor="classLevel">Class Level: </label>
             <input id="classLevelField" name="classLevel" type="number" min="1" max="20"/>
             <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="makeCharacterSubmit" type="submit" value="Make Character" />
+            <Button className="makeCharacterSubmit" type="submit" value="Make Character" />
         </form>
     );
 };
