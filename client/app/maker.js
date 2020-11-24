@@ -83,8 +83,7 @@ const DomoList = function(props){
                 <h3 className="domoName">Name: {domo.name}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
                 <h3 className="raceField">Race: {domo.race}</h3>
-                <h3 className="classNameField">Race: {domo.className}</h3>
-                <h3 className="classLevelField">Race: {domo.classLevel}</h3>
+                <h3 className="classNameField">Class: {domo.className}, {domo.classLevel}</h3>
                 <h3 className="idField">ID: {domo._id}</h3>
             </div>
         );

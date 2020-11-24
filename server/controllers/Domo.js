@@ -31,10 +31,7 @@ const makeDomo = (req, res) => {
   let newDomo = new Domo.DomoModel(domoData);
 
   if (req.body._id) {
-    newDomo = Domo.DomoModel.findOneAndUpdate(
-      { _id: req.body._id },
-      { new: true },
-    );
+    newDomo = Domo.DomoModel.findByIdAndUpdate(req.body._id, domoData, { upsert: true });
   }
 
   const domoPromise = newDomo.save();
