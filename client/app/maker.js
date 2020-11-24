@@ -123,14 +123,15 @@ const CharacterList = function (props) {
           alt="domo face"
           className="characterFace"
         />
+        <div className="characterNode_Section">
         <h3 className="characterName">Name: {character.name}</h3>
         <h3 className="characterAge">Age: {character.age}</h3>
         <h3 className="characterRace">Race: {character.race}</h3>
         <h3 className="characterClassName">
           Class: {character.className}, {character.classLevel}
         </h3>
-        <h3 className="idField">ID: {character._id}</h3>
-        <div id="characterAbilities">
+        </div>
+        <div className="characterNode_Section">
           <h3 className="base_strength">Str: {character.base_strength}</h3>
           <h3 className="base_dexterity">
             Dex: {character.base_dexterity}
@@ -141,6 +142,7 @@ const CharacterList = function (props) {
           <h3 className="base_wisdom">Wis: {character.base_wisdom}</h3>
           <h3 className="base_charisma">Cha: {character.base_charisma}</h3>
         </div>
+        <span className="idField">ID: {character._id}</span>
       </div>
     );
   });

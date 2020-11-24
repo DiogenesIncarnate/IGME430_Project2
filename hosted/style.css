@@ -82,9 +82,10 @@ nav:nth-child(1) {
     width: 2vw;
 }
 
-.characterForm_Section {
+.characterForm_Section, .characterNode_Section {
     width: 90%;
     padding: 0 5%;
+    border: 1vw solid black;
 }
 
 .makeCharacterSubmit {

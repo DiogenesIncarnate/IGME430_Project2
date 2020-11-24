@@ -168,7 +168,9 @@ var CharacterList = function CharacterList(props) {
       src: "/assets/img/domoface.jpeg",
       alt: "domo face",
       className: "characterFace"
-    }), /*#__PURE__*/React.createElement("h3", {
+    }), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section"
+    }, /*#__PURE__*/React.createElement("h3", {
       className: "characterName"
     }, "Name: ", character.name), /*#__PURE__*/React.createElement("h3", {
       className: "characterAge"
@@ -176,10 +178,8 @@ var CharacterList = function CharacterList(props) {
       className: "characterRace"
     }, "Race: ", character.race), /*#__PURE__*/React.createElement("h3", {
       className: "characterClassName"
-    }, "Class: ", character.className, ", ", character.classLevel), /*#__PURE__*/React.createElement("h3", {
-      className: "idField"
-    }, "ID: ", character._id), /*#__PURE__*/React.createElement("div", {
-      id: "characterAbilities"
+    }, "Class: ", character.className, ", ", character.classLevel)), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("h3", {
       className: "base_strength"
     }, "Str: ", character.base_strength), /*#__PURE__*/React.createElement("h3", {
@@ -190,7 +190,9 @@ var CharacterList = function CharacterList(props) {
       className: "base_wisdom"
     }, "Wis: ", character.base_wisdom), /*#__PURE__*/React.createElement("h3", {
       className: "base_charisma"
-    }, "Cha: ", character.base_charisma)));
+    }, "Cha: ", character.base_charisma)), /*#__PURE__*/React.createElement("span", {
+      className: "idField"
+    }, "ID: ", character._id));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "characterList"
