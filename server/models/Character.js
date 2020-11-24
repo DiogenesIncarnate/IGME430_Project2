@@ -45,7 +45,7 @@ const CharacterSchema = new mongoose.Schema({
     required: true,
     default: 10,
   },
-  base_consitution: {
+  base_constitution: {
     type: Number,
     min: 0,
     max: 20,
@@ -99,7 +99,7 @@ CharacterSchema.statics.toAPI = (doc) => ({
   race: doc.race,
   base_strength: doc.base_strength,
   base_dexterity: doc.base_dexterity,
-  base_consitution: doc.base_consitution,
+  base_constitution: doc.base_constitution,
   base_wisdom: doc.base_wisdom,
   base_charisma: doc.base_charisma,
   className: doc.className,

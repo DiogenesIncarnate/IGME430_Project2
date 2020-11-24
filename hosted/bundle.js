@@ -25,7 +25,7 @@ var CharacterForm = function CharacterForm(props) {
     action: "/maker",
     method: "POST",
     className: "characterForm"
-  }, /*#__PURE__*/React.createElement("label", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     htmlFor: "name"
   }, "Name: "), /*#__PURE__*/React.createElement("input", {
     id: "characterName",
@@ -62,7 +62,7 @@ var CharacterForm = function CharacterForm(props) {
     value: "Half-Orc"
   }, "Half-Orc"), /*#__PURE__*/React.createElement("option", {
     value: "Tiefling"
-  }, "Tiefling")), /*#__PURE__*/React.createElement("label", {
+  }, "Tiefling"))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
     htmlFor: "className"
   }, "Class: "), /*#__PURE__*/React.createElement("select", {
     id: "characterClassName",
@@ -99,7 +99,42 @@ var CharacterForm = function CharacterForm(props) {
     type: "number",
     min: "1",
     max: "20"
-  }), /*#__PURE__*/React.createElement("input", {
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "base_strength"
+  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+    name: "base_strength",
+    type: "number",
+    min: "1",
+    max: "20"
+  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "base_dexterity"
+  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+    name: "base_dexterity",
+    type: "number",
+    min: "1",
+    max: "20"
+  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "base_constitution"
+  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+    name: "base_constitution",
+    type: "number",
+    min: "1",
+    max: "20"
+  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "base_wisdom"
+  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+    name: "base_wisdom",
+    type: "number",
+    min: "1",
+    max: "20"
+  })), /*#__PURE__*/React.createElement("li", null, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "base_charisma"
+  }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+    name: "base_charisma",
+    type: "number",
+    min: "1",
+    max: "20"
+  })))), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
@@ -137,7 +172,17 @@ var CharacterList = function CharacterList(props) {
       className: "characterClassName"
     }, "Class: ", character.className, ", ", character.classLevel), /*#__PURE__*/React.createElement("h3", {
       className: "idField"
-    }, "ID: ", character._id));
+    }, "ID: ", character._id), /*#__PURE__*/React.createElement("ul", null, /*#__PURE__*/React.createElement("li", {
+      className: "base_strength"
+    }, "Str: ", character.base_strength), /*#__PURE__*/React.createElement("li", {
+      className: "base_dexterity"
+    }, "Dex: ", character.base_dexterity), /*#__PURE__*/React.createElement("li", {
+      className: "base_constitution"
+    }, "Con: ", character.base_constitution), /*#__PURE__*/React.createElement("li", {
+      className: "base_wisdom"
+    }, "Wis: ", character.base_wisdom), /*#__PURE__*/React.createElement("li", {
+      className: "base_charisma"
+    }, "Cha: ", character.base_charisma)));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "characterList"

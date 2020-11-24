@@ -24,6 +24,7 @@ const CharacterForm = (props) => {
         method="POST"
         className="characterForm"
         >
+            <div>
             <label htmlFor="name">Name: </label>
             <input id="characterName" type="text" name="name" placeholder="Character Name" />
             <label htmlFor="age">Age: </label>
@@ -40,6 +41,8 @@ const CharacterForm = (props) => {
               <option value="Half-Orc">Half-Orc</option>
               <option value="Tiefling">Tiefling</option>
             </select>
+            </div>
+            <div>
             <label htmlFor="className">Class: </label>
             <select id="characterClassName" name="className">
               <option value="Barbarian">Barbarian</option>
@@ -57,6 +60,16 @@ const CharacterForm = (props) => {
             </select>
             <label htmlFor="classLevel">Class Level: </label>
             <input id="classLevelField" name="classLevel" type="number" min="1" max="20"/>
+            </div>
+            <div>
+                <ul>
+                    <li><label htmlFor="base_strength">Strength: </label><input name="base_strength" type="number" min="1" max="20" /></li>
+                    <li><label htmlFor="base_dexterity">Strength: </label><input name="base_dexterity" type="number" min="1" max="20" /></li>
+                    <li><label htmlFor="base_constitution">Strength: </label><input name="base_constitution" type="number" min="1" max="20" /></li>
+                    <li><label htmlFor="base_wisdom">Strength: </label><input name="base_wisdom" type="number" min="1" max="20" /></li>
+                    <li><label htmlFor="base_charisma">Strength: </label><input name="base_charisma" type="number" min="1" max="20" /></li>
+                </ul>
+            </div>
             <input type="hidden" name="_csrf" value={props.csrf} />
             <input className="makeCharacterSubmit" type="submit" value="Make Character" />
         </form>
@@ -81,6 +94,13 @@ const CharacterList = function(props){
                 <h3 className="characterRace">Race: {character.race}</h3>
                 <h3 className="characterClassName">Class: {character.className}, {character.classLevel}</h3>
                 <h3 className="idField">ID: {character._id}</h3>
+                <ul>
+                    <li className="base_strength">Str: {character.base_strength}</li>
+                    <li className="base_dexterity">Dex: {character.base_dexterity}</li>
+                    <li className="base_constitution">Con: {character.base_constitution}</li>
+                    <li className="base_wisdom">Wis: {character.base_wisdom}</li>
+                    <li className="base_charisma">Cha: {character.base_charisma}</li>
+                </ul>
             </div>
         );
     });

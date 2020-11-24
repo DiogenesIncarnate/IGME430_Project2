@@ -24,7 +24,7 @@ const makeCharacter = (req, res) => {
     race: req.body.race,
     base_strength: req.body.base_strength,
     base_dexterity: req.body.base_dexterity,
-    base_consitution: req.body.base_consitution,
+    base_constitution: req.body.base_constitution,
     base_wisdom: req.body.base_wisdom,
     base_charisma: req.body.base_charisma,
     className: req.body.className,
