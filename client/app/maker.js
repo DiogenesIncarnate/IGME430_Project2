@@ -1,35 +1,35 @@
-const handleDomo = (e) => {
+const handleCharacter = (e) => {
     e.preventDefault();
 
     $("domoMessage").animate({width:'hide'}, 350);
     
-    if($("domoName").val() == '' || $("#domoAge").val() == ''){
+    if($("characterName").val() == '' || $("#characterAge").val() == ''){
         handleError("RAWR! All fields are required.");
         return false;
     }
 
-    sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function(){
-        loadDomosFromServer();
+    sendAjax('POST', $("#characterForm").attr("action"), $("#characterForm").serialize(), function(){
+        loadCharactersFromServer();
     });
 
     return false;
 };
 
-const DomoForm = (props) => {
+const CharacterForm = (props) => {
     return (
-        <form id="domoForm"
-        onSubmit={handleDomo}
-        name="domoForm"
+        <form id="characterForm"
+        onSubmit={handleCharacter}
+        name="characterForm"
         action="/maker"
         method="POST"
-        className="domoForm"
+        className="characterForm"
         >
             <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
+            <input id="characterName" type="text" name="name" placeholder="Character Name" />
             <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="text" name="age" placeholder="Domo Age" />
+            <input id="characterAge" type="text" name="age" placeholder="Character Age" />
             <label htmlFor="race">Race: </label>
-            <select id="raceField" name="race">
+            <select id="characterRace" name="race">
               <option value="Dwarf">Dwarf</option>
               <option value="Elf">Elf</option>
               <option value="Halfling">Halfling</option>
@@ -40,9 +40,8 @@ const DomoForm = (props) => {
               <option value="Half-Orc">Half-Orc</option>
               <option value="Tiefling">Tiefling</option>
             </select>
-            <div id="classesField" name="classes">
             <label htmlFor="className">Class: </label>
-            <select id="classNameField" name="className">
+            <select id="characterClassName" name="className">
               <option value="Barbarian">Barbarian</option>
               <option value="Bard">Bard</option>
               <option value="Cleric">Cleric</option>
@@ -58,60 +57,59 @@ const DomoForm = (props) => {
             </select>
             <label htmlFor="classLevel">Class Level: </label>
             <input id="classLevelField" name="classLevel" type="number" min="1" max="20"/>
-            </div>
             <input type="hidden" name="_csrf" value={props.csrf} />
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+            <input className="makeCharacterSubmit" type="submit" value="Make Character" />
         </form>
     );
 };
 
-const DomoList = function(props){
-    if(props.domos.length === 0){
+const CharacterList = function(props){
+    if(props.characters.length === 0){
         return (
-            <div className="domoList">
-                <h3 className="emptyDomo">No Domos yet</h3>
+            <div className="characterList">
+                <h3 className="emptyCharacter">No Characters yet</h3>
             </div>
         );
     }
 
-    const domoNodes = props.domos.map(function(domo){
+    const characterNodes = props.characters.map(function(character){
         return (
-            <div key={domo._id} className="domo">
+            <div key={character._id} className="character">
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-                <h3 className="domoName">Name: {domo.name}</h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3 className="raceField">Race: {domo.race}</h3>
-                <h3 className="classNameField">Class: {domo.className}, {domo.classLevel}</h3>
-                <h3 className="idField">ID: {domo._id}</h3>
+                <h3 className="characterName">Name: {character.name}</h3>
+                <h3 className="characterAge">Age: {character.age}</h3>
+                <h3 className="characterRace">Race: {character.race}</h3>
+                <h3 className="characterClassName">Class: {character.className}, {character.classLevel}</h3>
+                <h3 className="idField">ID: {character._id}</h3>
             </div>
         );
     });
 
     return (
-        <div className="domoList">
-            {domoNodes}
+        <div className="characterList">
+            {characterNodes}
         </div>
     );
 };
 
-const loadDomosFromServer = () => {
-    sendAjax('GET', '/getDomos', null, (data) => {
+const loadCharactersFromServer = () => {
+    sendAjax('GET', '/getCharacters', null, (data) => {
         ReactDOM.render(
-            <DomoList domos={data.domos} />, document.querySelector("#domos")  
+            <CharacterList characters={data.characters} />, document.querySelector("#characters")  
         );
     });
 };
 
 const setup = function(csrf){
     ReactDOM.render(
-        <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")  
+        <CharacterForm csrf={csrf} />, document.querySelector("#makeCharacter")  
     );
 
     ReactDOM.render(
-        <DomoList domos={[]} />, document.querySelector("#domos")
+        <CharacterList characters={[]} />, document.querySelector("#characters")
     );
 
-    loadDomosFromServer();
+    loadCharactersFromServer();
 };
 
 const getToken = () => {

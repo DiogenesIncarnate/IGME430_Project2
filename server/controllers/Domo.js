@@ -1,68 +1,68 @@
 const models = require('../models');
 
-const { Domo } = models;
+const { Character } = models;
 
 const makerPage = (req, res) => {
-  Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+  Character.CharacterModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.render('app', { csrfToken: req.csrfToken(), domos: docs });
+    return res.render('app', { csrfToken: req.csrfToken(), characters: docs });
   });
 };
 
-const makeDomo = (req, res) => {
+const makeCharacter = (req, res) => {
   if (!req.body.name || !req.body.age) {
     return res.status(400).json({ error: 'RAWR! Both name and age are required' });
   }
 
-  const domoData = {
+  const characterData = {
     name: req.body.name,
     age: req.body.age,
     race: req.body.race,
-    baseAbilities: req.body.baseAbilities,
-    classes: req.body.classes,
-    spells: req.body.spells,
+    base_strength: req.body.base_strength,
+    base_dexterity: req.body.base_dexterity,
+    base_consitution: req.body.base_consitution,
+    base_wisdom: req.body.base_wisdom,
+    base_charisma: req.body.base_charisma,
+    className: req.body.className,
+    classLevel: req.body.classLevel,
     owner: req.session.account._id,
   };
 
-  const filter = { name: req.body.name };
-  const newDomo = Domo.DomoModel.findAndUpdate(filter, domoData, {
-    new: true,
-    upsert: true,
-  });
+  const newCharacter = Character.CharacterModel(characterData);
 
-  const domoPromise = newDomo.save();
+  const characterPromise = newCharacter.save();
 
-  domoPromise.then(() => res.json({ redirect: '/maker' }));
+  characterPromise.then(() => res.json({ redirect: '/maker' }));
 
-  domoPromise.catch((err) => {
+  characterPromise.catch((err) => {
     console.log(err); if (err.code === 11000) {
-      return res.status(400).json({ error: 'Domo already exists.' });
+      return res.status(400).json({ error: 'Character already exists.' });
     }
 
     return res.status(400).json({ error: 'An error occurred' });
   });
 
-  return domoPromise;
+  return characterPromise;
 };
 
-const getDomos = (request, response) => {
+const getCharacters = (request, response) => {
   const req = request;
   const res = response;
 
-  return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+  return Character.CharacterModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred.' });
     }
 
-    return res.json({ domos: docs });
+    return res.json({ characters: docs });
   });
 };
 
 module.exports.makerPage = makerPage;
-module.exports.getDomos = getDomos;
-module.exports.make = makeDomo;
+module.exports.getCharacters = getCharacters;
+module.exports.make = makeCharacter;

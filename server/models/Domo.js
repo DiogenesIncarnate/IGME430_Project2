@@ -3,14 +3,14 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
 
-let DomoModel = {};
+let CharacterModel = {};
 
 // mongoose.Types.ObjectID is a function that
 // converts string ID to real mongo ID
 const convertId = mongoose.Types.ObjectId;
 const setString = (str) => _.escape(str).trim();
 
-const DomoSchema = new mongoose.Schema({
+const CharacterSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -31,42 +31,40 @@ const DomoSchema = new mongoose.Schema({
     set: setString,
   },
 
-  baseAbilities: {
-    strength: {
-      type: Number,
-      min: 0,
-      max: 20,
-      required: true,
-      default: 10,
-    },
-    dexterity: {
-      type: Number,
-      min: 0,
-      max: 20,
-      required: true,
-      default: 10,
-    },
-    consitution: {
-      type: Number,
-      min: 0,
-      max: 20,
-      required: true,
-      default: 10,
-    },
-    wisdom: {
-      type: Number,
-      min: 0,
-      max: 20,
-      required: true,
-      default: 10,
-    },
-    charisma: {
-      type: Number,
-      min: 0,
-      max: 20,
-      required: true,
-      default: 10,
-    },
+  base_strength: {
+    type: Number,
+    min: 0,
+    max: 20,
+    required: true,
+    default: 10,
+  },
+  base_dexterity: {
+    type: Number,
+    min: 0,
+    max: 20,
+    required: true,
+    default: 10,
+  },
+  base_consitution: {
+    type: Number,
+    min: 0,
+    max: 20,
+    required: true,
+    default: 10,
+  },
+  base_wisdom: {
+    type: Number,
+    min: 0,
+    max: 20,
+    required: true,
+    default: 10,
+  },
+  base_charisma: {
+    type: Number,
+    min: 0,
+    max: 20,
+    required: true,
+    default: 10,
   },
 
   className: {
@@ -83,15 +81,6 @@ const DomoSchema = new mongoose.Schema({
     required: true,
   },
 
-  spells: [{
-    spellName: {
-      type: String,
-      required: true,
-      trim: true,
-      set: setString,
-    },
-  }],
-
   owner: {
     type: mongoose.Schema.ObjectId,
     required: true,
@@ -104,25 +93,31 @@ const DomoSchema = new mongoose.Schema({
   },
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
+CharacterSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   age: doc.age,
   race: doc.race,
-  baseAbilities: doc.baseAbilities,
+  base_strength: doc.base_strength,
+  base_dexterity: doc.base_dexterity,
+  base_consitution: doc.base_consitution,
+  base_wisdom: doc.base_wisdom,
+  base_charisma: doc.base_charisma,
   className: doc.className,
   classLevel: doc.classLevel,
-  spells: doc.spells,
 });
 
-DomoSchema.statics.findByOwner = (ownerId, callback) => {
+CharacterSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age race baseAbilities classes spells').lean().exec(callback);
+  return CharacterModel.find(search)
+    .select('name age race base_strength base_dexterity base_constitution base_wisdom base_charisma className classLevel')
+    .lean()
+    .exec(callback);
 };
 
-DomoModel = mongoose.model('Domo', DomoSchema);
+CharacterModel = mongoose.model('Character', CharacterSchema);
 
-module.exports.DomoModel = DomoModel;
-module.exports.DomoSchema = DomoSchema;
+module.exports.CharacterModel = CharacterModel;
+module.exports.CharacterSchema = CharacterSchema;
