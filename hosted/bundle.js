@@ -1,9 +1,5 @@
 "use strict";
 
-var _Button = _interopRequireDefault(require("react-bootstrap/Button"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
 var handleCharacter = function handleCharacter(e) {
   e.preventDefault();
   $("characterMessage").animate({
@@ -107,7 +103,7 @@ var CharacterForm = function CharacterForm(props) {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
-  }), /*#__PURE__*/React.createElement(_Button["default"], {
+  }), /*#__PURE__*/React.createElement("input", {
     className: "makeCharacterSubmit",
     type: "submit",
     value: "Make Character"
