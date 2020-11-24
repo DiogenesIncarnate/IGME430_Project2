@@ -17,6 +17,10 @@ var handleCharacter = function handleCharacter(e) {
   return false;
 };
 
+var toggleExpandCharacter = function toggleExpandCharacter(e) {
+  if (e.target.style.height !== '20v') e.target.style.height = '20v';else e.target.style.height = '30v';
+};
+
 var CharacterForm = function CharacterForm(props) {
   return /*#__PURE__*/React.createElement("form", {
     id: "characterForm",
@@ -122,7 +126,8 @@ var CharacterList = function CharacterList(props) {
   var characterNodes = props.characters.map(function (character) {
     return /*#__PURE__*/React.createElement("div", {
       key: character._id,
-      className: "character"
+      className: "character",
+      onClick: toggleExpandCharacter
     }, /*#__PURE__*/React.createElement("img", {
       src: "/assets/img/domoface.jpeg",
       alt: "domo face",

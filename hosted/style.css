@@ -199,6 +199,7 @@ nav:nth-child(1) {
 
 .character {
     width: 95%;
+    height: 20vw;
     margin: 0 auto;
     margin-top: 2px;
     margin-bottom: 2px;
