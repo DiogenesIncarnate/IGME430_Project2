@@ -99,7 +99,6 @@ nav:nth-child(1) {
     width: auto;
     height: 30%;
     text-align: center;
-    display:inline-block;
 }
 
 .makeCharacterSubmit {

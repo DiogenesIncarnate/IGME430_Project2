@@ -164,11 +164,7 @@ var CharacterList = function CharacterList(props) {
     return /*#__PURE__*/React.createElement("div", {
       key: character._id,
       className: "character"
-    }, /*#__PURE__*/React.createElement("img", {
-      src: "/assets/img/domoface.jpeg",
-      alt: "domo face",
-      className: "characterFace"
-    }), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("h3", {
       className: "characterName"

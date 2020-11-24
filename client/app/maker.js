@@ -117,11 +117,6 @@ const CharacterList = function (props) {
   const characterNodes = props.characters.map(function (character) {
     return (
       <div key={character._id} className="character">
-        <img
-          src="/assets/img/domoface.jpeg"
-          alt="domo face"
-          className="characterFace"
-        />
         <div className="characterNode_Section">
         <h3 className="characterName">Name: {character.name}</h3>
         <h3 className="characterAge">Age: {character.age}</h3>
