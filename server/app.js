@@ -13,7 +13,7 @@ const csrf = require('csurf');
 const redis = require('redis');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
-//mongodb://localhost/project2-jsr6181
+// mongodb://localhost/project2-jsr6181
 const dbURL = process.env.MONGODB_URI || 'mongodb+srv://jsr6181:jsoj1527242702@cluster0.knluz.mongodb.net/project2-jsr6181?retryWrites=true&w=majority';
 
 // Setup mongoose options to use newer functionality

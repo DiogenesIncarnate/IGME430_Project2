@@ -1,9 +1,9 @@
-const models = require("../models");
-const pdfcrowd = require("pdfcrowd");
+const pdfcrowd = require('pdfcrowd');
+const models = require('../models');
 // create the API client instance
 const client = new pdfcrowd.HtmlToPdfClient(
-  "DiogenesIncarnate",
-  "87175f7efd2c7a12266402f3ed8ebb68"
+  'DiogenesIncarnate',
+  '87175f7efd2c7a12266402f3ed8ebb68',
 );
 
 const { Character } = models;
@@ -12,10 +12,10 @@ const makerPage = (req, res) => {
   Character.CharacterModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
-      return res.status(400).json({ error: "An error occurred" });
+      return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.render("app", { csrfToken: req.csrfToken(), characters: docs });
+    return res.render('app', { csrfToken: req.csrfToken(), characters: docs });
   });
 };
 
@@ -23,7 +23,7 @@ const makeCharacter = (req, res) => {
   if (!req.body.name || !req.body.age) {
     return res
       .status(400)
-      .json({ error: "RAWR! Both name and age are required" });
+      .json({ error: 'RAWR! Both name and age are required' });
   }
 
   const characterData = {
@@ -44,15 +44,15 @@ const makeCharacter = (req, res) => {
 
   const characterPromise = newCharacter.save();
 
-  characterPromise.then(() => res.json({ redirect: "/maker" }));
+  characterPromise.then(() => res.json({ redirect: '/maker' }));
 
   characterPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
-      return res.status(400).json({ error: "Character already exists." });
+      return res.status(400).json({ error: 'Character already exists.' });
     }
 
-    return res.status(400).json({ error: "An error occurred" });
+    return res.status(400).json({ error: 'An error occurred' });
   });
 
   return characterPromise;
@@ -67,11 +67,11 @@ const getCharacters = (request, response) => {
     (err, docs) => {
       if (err) {
         console.log(err);
-        return res.status(400).json({ error: "An error occurred." });
+        return res.status(400).json({ error: 'An error occurred.' });
       }
 
       return res.json({ characters: docs });
-    }
+    },
   );
 };
 
@@ -84,21 +84,23 @@ const saveCharacter = (request, response) => {
     client.setElementToConvert(req.body);
   } catch (why) {
     // report the error
-    console.error("Pdfcrowd Error: " + why);
-    process.exit(1);
+    console.error(`Pdfcrowd Error: ${why}`);
+    return res.status(400).json({ error: 'An error occurred.' });
   }
 
-  const fileName = req.body.id || "defaultCharacter"
+  const fileName = req.body.id || 'defaultCharacter';
 
   // run the conversion and write the result to a file
   client.convertUrlToFile(
-    "https://pdfcrowd.com/doc/api/",
+    'https://project2-jsr6181.herokuapp.com/maker',
     `${fileName}.pdf`,
-    function (err, fileName) {
-      if (err) return console.error("Pdfcrowd Error: " + err);
-      console.log("Success: the file was created " + fileName);
-    }
+    (err, f) => {
+      if (err) return console.error(`Pdfcrowd Error: ${err}`);
+      return console.log(`Success: the file was created ${f}`);
+    },
   );
+
+  return res.status(400).json({ success: `Success: the file was created ${fileName}` });
 };
 
 module.exports.makerPage = makerPage;
