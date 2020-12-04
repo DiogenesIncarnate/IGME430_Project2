@@ -13,8 +13,8 @@ const csrf = require('csurf');
 const redis = require('redis');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
-
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+//mongodb://localhost/project2-jsr6181
+const dbURL = process.env.MONGODB_URI || 'mongodb+srv://jsr6181:jsoj1527242702@cluster0.knluz.mongodb.net/project2-jsr6181?retryWrites=true&w=majority';
 
 // Setup mongoose options to use newer functionality
 const mongooseOptions = {
@@ -52,7 +52,7 @@ const router = require('./router.js');
 
 const app = express();
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
-app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
+app.use(favicon(`${__dirname}/../hosted/img/D&D_Logo.png`));
 app.use(compression());
 app.use(bodyParser.urlencoded({
   extended: true,

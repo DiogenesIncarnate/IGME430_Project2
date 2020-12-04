@@ -6,6 +6,28 @@ html, body {
     overflow-x: hidden;
 }
 
+@font-face{
+    font-family: "D&D";
+    src: url(fonts/Friz\ Quadrata\ Bold.otf);
+}
+
+@font-face{
+    font-family: "D&D_Body";
+    src: url(fonts/Scala_SansRegular_LF.ttf);
+}
+
+@font-face{
+    font-family: "D&D_Body";
+    src: url(fonts/Scala-Sans-Bold-LF_39547.ttf);
+    font-style: bold;
+}
+
+@font-face{
+    font-family: "D&D_Body";
+    src: url(fonts/ScalaSansItalic.ttf);
+    font-style: italic;
+}
+
 #logo {
     height: 40px;
     width: 40;
@@ -17,11 +39,27 @@ html, body {
 nav {
     width: 100%;
     height: 50px;
-    background-color: #55acee;
+    background-color: black;
+    font-family: "D&D";
 }
 
 nav:nth-child(1) {
     padding-left: 25px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+select option{
+    background-color: lightgrey;
+}
+
+select:after{
+    color: black;
 }
 
 .navlink {
@@ -38,13 +76,13 @@ nav:nth-child(1) {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: gray;
     transition: background-color 0.4s ease;
 }
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
-    background-color: #66bdff;
+    background-color: darkgrey;
 }
 
 #makeCharacter{
@@ -52,22 +90,25 @@ nav:nth-child(1) {
 }
 
 .characterForm {
-    border: 2px solid black;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
     height: 15vw;
-    width: auto;
+    width: 90vw;
     margin: 1vw auto;
     padding: 1vw;
-    background-color: gray;
+    border: 2px solid gray;
+    border-radius: 0.5vw;
+    background-color: black;
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
     text-align: center;
     vertical-align: middle;
+    font-family: "D&D";
 }
 
 .characterForm label {
-    float:left;
-    margin: auto 0.5vw;
+    float: left;
+    margin: auto 2vw;
     width: 5vw;
     font-size: 1vw;
     text-align: center;
@@ -76,39 +117,119 @@ nav:nth-child(1) {
 
 .characterForm input, .characterForm select {
     float:left;
-    margin: auto 0.5vw;
     width: 10vw;
-    font-size: 1vw;
+    height: 2vw;
+    margin: auto 0.5vw;
+    outline-offset: 0;
+    outline: -webkit-focus-ring-color auto 1px;
+    font-weight: bold;
+    font-family: "D&D_Body";
+    font-size: 1.5vw;
+    text-align: center;
+    transition: all 0.4s ease;
 }
 
-.characterForm select {
-    width: 5vw;
+.characterForm select{
+    text-align-last: center;
 }
 
 .characterForm input[type=number]{
-    width: 2vw;
+    width: 4vw;
+    font-size: 1.5vw;
+}
+
+.characterForm input[type=select]:hover, .characterForm input[type=number]:hover, .characterForm input[type=text]:hover{
+    background-color: transparent;
+    color: white;
 }
 
 .characterForm_Section {
-    width: auto;
-    height: 30%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 25%;
+    height: 100%;
+    margin: auto;
     text-align: center;
 }
 
+.characterForm_Section_Item{
+    display: flex;
+    justify-content: center;
+    height: auto;
+    width: auto;
+    margin: auto;
+}
+
+.characterList{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: auto;
+    margin: 2vw;
+    padding: 2vw;
+    border: 0.2vw solid black;
+    border-radius: 0.5vw;
+}
+
+.character {
+    width: auto;
+    height: 10vw;
+    margin: 1vw auto;
+    border: 0.05vw solid gray;
+    border-radius: 0.1vw;
+    background-color: lightgrey;
+    padding: 0.5vw;
+    overflow: hidden;
+    text-align: center;
+    font-size: 0.75vw;
+    font-family: "D&D_Body";
+}
+
+.character:hover {
+    transition: border-color 0.2s ease-out;
+    border-color: rgba(0,0,0, 0.8);
+    transition: background-color 2.6s ease-out;
+    background-color: darkgrey;
+}
+
+img.characterFace {
+    margin-left: 25px;
+    margin-right: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 4px;
+    margin-top:10px;
+    float:left;
+}
+
 .characterNode_Section{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
     width: auto;
     height: 30%;
+    margin: auto;
+}
+
+.characterNode_Section_Item{
+    display: inline-flex;
+    width: auto;
+    margin: auto 2%;
     text-align: center;
 }
 
 .makeCharacterSubmit {
+    display: flex;
+    justify-content: center;
     transition: background-color 0.4s ease;
-    display: inline;
-    width: 90px;
+    width: 15vw;
+    height: 4vw;
     background-color: black;
-    border-radius: 2px;
+    border-radius: 0.1vw;
     color: white;
-    text-decoration: none;
+    font-size: 2vw;
 }
 
 .makeCharacterSubmit:link, .makeCharacterSubmit:visited, .makeCharacterSubmit:hover, .makeCharacterSubmit:active {
@@ -121,39 +242,59 @@ nav:nth-child(1) {
 }
 
 .mainForm {
-    height: 300px;
-    width: 350px;
-    margin: 0 auto;
-    padding-top: 350px;
-    font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 50%;
+    width: 30%;
+    margin: auto;
+    font-family: "D&D";
+    font-size: 1.5vw;
 }
 
-.mainForm h3 {
+.mainForm #user, #pass, #pass2, #newPass, #newPass2{
+    width: 15vw;
+    height: 2vw;
+    margin: auto;
+    text-align: left;
+    font-size: 1vw;
+}
+
+.mainForm label{
+    width: 15vw;
+    height: 3vw;
+    margin: auto;
+    padding-top: 1.5vw;
     text-align: center;
+    font-size: 1vw;
 }
 
-.mainForm label {
-    display: inline-block;
-    width: 100px;
-    margin-right: 10px;
-    text-align: right;
-    font-size: 1.2em;
+.mainForm input[type=text]{
+    float:left;
+    width: 10vw;
+    height: 2vw;
+    margin: auto 0.5vw;
+    outline-offset: 0;
+    outline: -webkit-focus-ring-color auto 1px;
+    font-weight: bold;
+    font-family: "D&D_Body";
+    font-size: 1.5vw;
+    text-align: center;
+    transition: all 0.4s ease;
 }
 
 .formSubmit {
     transition: background-color 0.4s ease;
-    display: block;
     text-align: center;
-    margin: 0 auto;
-    margin-top: 14px;
-    font-size: 1.2em;
-    width: 100px;
+    margin: 4vw 1vw;
+    width: 15vw;
+    height: 3vw;
     background-color: black;
-    border-radius: 2px;
-    border-color: #66acee;
-    padding: 3px 0px;
+    border-radius: 0.2vw;
+    border-color: gray;
     color: white;
-    text-decoration: none;
+    font-family: "D&D";
 }
 
 .formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
@@ -162,17 +303,10 @@ nav:nth-child(1) {
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: gray;
+    background-color: darkgrey;
 }
 
-#user, #pass, #pass2 {
-    text-align: center;
-    font-size: 1.1em;
-    width: 180px;
-    border-radius: 6px;
-}
-
-#user:focus, #pass:focus, #pass2:focus {
+#user:focus, #pass:focus, #pass2:focus, #newPass:focus, #newPass2:focus{
     outline: none;
     box-shadow: 0px 0px 1px 1px black;
 }
@@ -206,62 +340,4 @@ nav:nth-child(1) {
     font-weight: bold;
     color: red;
     font-style: italic;
-}
-
-#character {
-    z-index: 225;
-    margin-top: -20px;
-    margin-left: 135px;
-    height: 450px;
-    width: 300px;
-    -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
-    transform: rotate(330deg);
-}
-
-#character {
-    width: 40%;
-    min-width: 400px;
-    border: 2px solid black;
-    border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 100px;
-}
-
-.character {
-    width: 95%;
-    height: 20vw;
-    margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 2px solid gray;
-    border-radius: 4px;
-    background-color: lightgrey;
-    padding: 10px;
-    min-height:60px;
-    overflow: hidden;
-}
-
-.character:hover {
-    transition: border-color 0.2s ease-out;
-    border-color: rgba(0,0,0, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: darkgrey;
-}
-
-img.characterFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-    float:left;
-}
-
-.character h3 {
-    float: left;
-    width: 15%;
-    font-size: 1.5em;
-    text-align: center;
 }

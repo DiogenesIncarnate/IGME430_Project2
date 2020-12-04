@@ -1,7 +1,7 @@
 const handleLogin = (e) => {
     e.preventDefault();
 
-    $("#domoMessage").animate({width:'hide'}, 350);
+    $("#characterMessage").animate({width:'hide'}, 350);
     
     if($("user").val() == '' || $("pass").val() == ''){
         handleError("RAWR! Username or password is empty.");
@@ -18,7 +18,7 @@ const handleLogin = (e) => {
 const handleSignup = (e) => {
     e.preventDefault();
 
-    $("#domoMessage").animate({width:'hide'}, 350);
+    $("#characterMessage").animate({width:'hide'}, 350);
 
     if($("username").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
         handleError("RAWR! All fields are required.");
@@ -35,6 +35,8 @@ const handleSignup = (e) => {
     return false;
 };
 
+
+
 const LoginWindow = (props) => {
     return (
         <form id="loginForm" name="loginForm"
@@ -44,9 +46,9 @@ const LoginWindow = (props) => {
         className="mainForm"
         >
             <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
+            <input id="user" type="text" name="username" placeholder="Username" />
             <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
+            <input id="pass" type="password" name="pass" placeholder="Password" />
             <input type="hidden" name="_csrf" value={props.csrf} />
             <input className="formSubmit" type="submit" value="Sign in" />
         </form>
@@ -63,11 +65,11 @@ const SignupWindow = (props) => {
         className="mainForm"
         >
             <label htmlFor="username">Username: </label>
-            <input id="user" type="text" name="username" placeholder="username" />
+            <input id="user" type="text" name="username" placeholder="Username" />
             <label htmlFor="pass">Password: </label>
-            <input id="pass" type="password" name="pass" placeholder="password" />
-            <label htmlFor="pass2">Password: </label>
-            <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+            <input id="pass" type="password" name="pass" placeholder="Password" />
+            <label htmlFor="pass2">Confirm Password: </label>
+            <input id="pass2" type="password" name="pass2" placeholder="Retype Password" />
             <input type="hidden" name="_csrf" value={props.csrf} />
             <input className="formSubmit" type="submit" value="Sign Up" />
         </form>

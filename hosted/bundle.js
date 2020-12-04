@@ -7,7 +7,7 @@ var handleCharacter = function handleCharacter(e) {
   }, 350);
 
   if ($("characterName").val() == "" || $("#characterAge").val() == "") {
-    handleError("RAWR! All fields are required.");
+    handleError("All fields are required.");
     return false;
   }
 
@@ -15,6 +15,30 @@ var handleCharacter = function handleCharacter(e) {
     loadCharactersFromServer();
   });
   return false;
+};
+
+var handlePassChange = function handlePassChange(e) {
+  e.preventDefault();
+  $("#characterMessage").animate({
+    width: "hide"
+  }, 350);
+
+  if ($("username").val() == "" || $("#pass").val() == "" || $("#newPass").val() == "" || $("#newPass2").val() == "") {
+    handleError("All fields are required.");
+    return false;
+  }
+
+  if ($("#newPass").val() != $("#newPass2").val()) {
+    handleError("RAWR! Passwords do not match.");
+    return false;
+  }
+
+  sendAjax("POST", $("#passChangeForm").attr("action"), $("#passChangeForm").serialize(), redirect);
+};
+
+var saveCharacter = function saveCharacter(e) {
+  e.preventDefault();
+  sendAjax("POST", $("#".concat(e.target.id)).attr("action"), $("#".concat(e.target.id)).serialize(), redirect);
 };
 
 var CharacterForm = function CharacterForm(props) {
@@ -27,21 +51,27 @@ var CharacterForm = function CharacterForm(props) {
     className: "characterForm"
   }, /*#__PURE__*/React.createElement("div", {
     className: "characterForm_Section"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "name"
   }, "Name: "), /*#__PURE__*/React.createElement("input", {
     id: "characterName",
     type: "text",
     name: "name",
-    placeholder: "Character Name"
-  }), /*#__PURE__*/React.createElement("label", {
+    placeholder: "Name"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "age"
   }, "Age: "), /*#__PURE__*/React.createElement("input", {
     id: "characterAge",
-    type: "text",
+    type: "number",
     name: "age",
-    placeholder: "Character Age"
-  }), /*#__PURE__*/React.createElement("label", {
+    placeholder: "Age"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "race"
   }, "Race: "), /*#__PURE__*/React.createElement("select", {
     id: "characterRace",
@@ -64,13 +94,16 @@ var CharacterForm = function CharacterForm(props) {
     value: "Half-Orc"
   }, "Half-Orc"), /*#__PURE__*/React.createElement("option", {
     value: "Tiefling"
-  }, "Tiefling"))), /*#__PURE__*/React.createElement("div", {
+  }, "Tiefling")))), /*#__PURE__*/React.createElement("div", {
     className: "characterForm_Section"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "className"
   }, "Class: "), /*#__PURE__*/React.createElement("select", {
     id: "characterClassName",
-    name: "className"
+    name: "className",
+    placeholder: "Class"
   }, /*#__PURE__*/React.createElement("option", {
     value: "Barbarian"
   }, "Barbarian"), /*#__PURE__*/React.createElement("option", {
@@ -95,16 +128,21 @@ var CharacterForm = function CharacterForm(props) {
     value: "Warlock"
   }, "Warlock"), /*#__PURE__*/React.createElement("option", {
     value: "Wizard"
-  }, "Wizard")), /*#__PURE__*/React.createElement("label", {
+  }, "Wizard"))), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "classLevel"
   }, "Class Level: "), /*#__PURE__*/React.createElement("input", {
     id: "classLevelField",
     name: "classLevel",
     type: "number",
+    placeholder: "LVL",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("div", {
+  }))), /*#__PURE__*/React.createElement("div", {
     className: "characterForm_Section"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_strength"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
@@ -112,35 +150,45 @@ var CharacterForm = function CharacterForm(props) {
     type: "number",
     min: "1",
     max: "20"
-  }), /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_dexterity"
   }, "Dexterity: "), /*#__PURE__*/React.createElement("input", {
     name: "base_dexterity",
     type: "number",
     min: "1",
     max: "20"
-  }), /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_constitution"
   }, "Constitution: "), /*#__PURE__*/React.createElement("input", {
     name: "base_constitution",
     type: "number",
     min: "1",
     max: "20"
-  }), /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_wisdom"
   }, "Wisdom: "), /*#__PURE__*/React.createElement("input", {
     name: "base_wisdom",
     type: "number",
     min: "1",
     max: "20"
-  }), /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_charisma"
   }, "Charisma: "), /*#__PURE__*/React.createElement("input", {
     name: "base_charisma",
     type: "number",
     min: "1",
     max: "20"
-  })), /*#__PURE__*/React.createElement("input", {
+  }))), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section"
+  }, /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
@@ -148,69 +196,197 @@ var CharacterForm = function CharacterForm(props) {
     className: "makeCharacterSubmit",
     type: "submit",
     value: "Make Character"
-  }));
+  })));
 };
 
 var CharacterList = function CharacterList(props) {
   if (props.characters.length === 0) {
     return /*#__PURE__*/React.createElement("div", {
       className: "characterList"
-    }, /*#__PURE__*/React.createElement("h3", {
-      className: "emptyCharacter"
-    }, "No Characters yet"));
-  }
-
-  var characterNodes = props.characters.map(function (character) {
-    return /*#__PURE__*/React.createElement("div", {
-      key: character._id,
-      className: "character"
     }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("h3", {
-      className: "characterName"
-    }, "Name: ", character.name), /*#__PURE__*/React.createElement("h3", {
-      className: "characterAge"
-    }, "Age: ", character.age), /*#__PURE__*/React.createElement("h3", {
-      className: "characterRace"
-    }, "Race: ", character.race), /*#__PURE__*/React.createElement("h3", {
-      className: "characterClassName"
-    }, "Class: ", character.className, ", ", character.classLevel)), /*#__PURE__*/React.createElement("div", {
+      className: "emptyCharacter"
+    }, "No Characters yet")));
+  }
+
+  var characterNodes = props.characters.map(function (character) {
+    return /*#__PURE__*/React.createElement("form", {
+      id: character._id,
+      onSubmit: saveCharacter,
+      name: "character",
+      action: "/saveCharacter",
+      method: "POST",
+      className: "character"
+    }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section"
-    }, /*#__PURE__*/React.createElement("h3", {
-      className: "base_strength"
-    }, "Str: ", character.base_strength), /*#__PURE__*/React.createElement("h3", {
-      className: "base_dexterity"
-    }, "Dex: ", character.base_dexterity), /*#__PURE__*/React.createElement("h3", {
-      className: "base_constitution"
-    }, "Con: ", character.base_constitution), /*#__PURE__*/React.createElement("h3", {
-      className: "base_wisdom"
-    }, "Wis: ", character.base_wisdom), /*#__PURE__*/React.createElement("h3", {
-      className: "base_charisma"
-    }, "Cha: ", character.base_charisma)), /*#__PURE__*/React.createElement("span", {
-      className: "idField"
-    }, "ID: ", character._id));
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "characterName"
+    }, "Name: ", character.name)), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "characterAge"
+    }, "Age: ", character.age)), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "characterRace"
+    }, "Race: ", character.race)), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "characterClassName"
+    }, "Class: ", character.className, ", ", character.classLevel))), /*#__PURE__*/React.createElement("div", {
+      id: "characterNode_Section"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "base_strength"
+    }, "Str:", " ", character.base_strength + props.dndData[character.race].str_bonus, " ", "(", character.base_strength, " +", props.dndData[character.race].str_bonus, ")")), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "base_dexterity"
+    }, "Dex:", " ", character.base_dexterity + props.dndData[character.race].dex_bonus, " ", "(", character.base_dexterity, " +", props.dndData[character.race].dex_bonus, ")")), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "base_constitution"
+    }, "Con:", " ", character.base_constitution + props.dndData[character.race].con_bonus, " ", "(", character.base_constitution, " +", props.dndData[character.race].con_bonus, ")")), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "base_wisdom"
+    }, "Wis:", " ", character.base_wisdom + props.dndData[character.race].wis_bonus, " ", "(", character.base_wisdom, " +", props.dndData[character.race].wis_bonus, ")")), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "base_charisma"
+    }, "Cha:", " ", character.base_charisma + props.dndData[character.race].cha_bonus, " ", "(", character.base_charisma, " +", props.dndData[character.race].cha_bonus, ")"))), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", {
+      id: "idField"
+    }, "ID: ", character._id)), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "hidden",
+      name: "_csrf",
+      value: props.csrf
+    }), /*#__PURE__*/React.createElement("input", {
+      type: "submit",
+      value: "Export to PDF"
+    }))));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "characterList"
   }, characterNodes);
 };
 
-var loadCharactersFromServer = function loadCharactersFromServer() {
+var PassChangeWindow = function PassChangeWindow(props) {
+  return /*#__PURE__*/React.createElement("form", {
+    id: "passChangeForm",
+    name: "passChangeForm",
+    onSubmit: handlePassChange,
+    action: "/passChange",
+    method: "POST",
+    className: "mainForm"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "username"
+  }, "Username: "), /*#__PURE__*/React.createElement("input", {
+    id: "user",
+    type: "text",
+    name: "username",
+    placeholder: "Username"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "pass"
+  }, "Old Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "pass",
+    type: "password",
+    name: "pass",
+    placeholder: "Old Password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "newPass"
+  }, "New Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass",
+    type: "password",
+    name: "newPass",
+    placeholder: "New Password"
+  }), /*#__PURE__*/React.createElement("label", {
+    htmlFor: "newPass2"
+  }, "Confirm New Password: "), /*#__PURE__*/React.createElement("input", {
+    id: "newPass2",
+    type: "password",
+    name: "newPass2",
+    placeholder: "Retype New Password"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Confirm Change"
+  }));
+};
+
+var createPassChangeWindow = function createPassChangeWindow(csrf) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(PassChangeWindow, {
+    csrf: csrf
+  }), document.querySelector("#content"));
+};
+
+var loadCharactersFromServer = function loadCharactersFromServer(csrf) {
   sendAjax("GET", "/getCharacters", null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(CharacterList, {
-      characters: data.characters
-    }), document.querySelector("#characters"));
+    var results = [];
+    var classes = [];
+    var races = []; // race and class data that needs to be fetched
+
+    for (var i = 0; i < data.characters.length; i++) {
+      if (!classes.includes(data.characters[i].className)) classes.push(data.characters[i].className);
+      if (!races.includes(data.characters[i].race)) races.push(data.characters[i].race);
+    } // collect promises from api calls
+
+
+    var promises = [];
+    classes.forEach(function (c) {
+      promises.push(sendAjax("GET", "https://www.dnd5eapi.co/api/classes/".concat(c.toLowerCase()), null, function (res) {
+        results[res.name] = res;
+      }));
+    });
+    races.forEach(function (r) {
+      promises.push(sendAjax("GET", "https://www.dnd5eapi.co/api/races/".concat(r.toLowerCase()), null, function (res) {
+        results[res.name] = res;
+        results[res.name]["str_bonus"] = getDND_Race_AB(results[res.name], "str");
+        results[res.name]["dex_bonus"] = getDND_Race_AB(results[res.name], "dex");
+        results[res.name]["con_bonus"] = getDND_Race_AB(results[res.name], "con");
+        results[res.name]["wis_bonus"] = getDND_Race_AB(results[res.name], "wis");
+        results[res.name]["cha_bonus"] = getDND_Race_AB(results[res.name], "cha");
+      }));
+    }); // load character list after all promises are fulfilled
+
+    $.when.apply(null, promises).then(function () {
+      ReactDOM.render( /*#__PURE__*/React.createElement(CharacterList, {
+        csrf: csrf,
+        dndData: results,
+        characters: data.characters
+      }), document.querySelector("#characters"));
+    });
   });
 };
 
 var setup = function setup(csrf) {
+  var passChangeButton = document.querySelector("#passChangeButton");
+  passChangeButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    createPassChangeWindow(csrf);
+    return false;
+  });
   ReactDOM.render( /*#__PURE__*/React.createElement(CharacterForm, {
     csrf: csrf
   }), document.querySelector("#makeCharacter"));
   ReactDOM.render( /*#__PURE__*/React.createElement(CharacterList, {
+    dndData: true,
     characters: []
   }), document.querySelector("#characters"));
-  loadCharactersFromServer();
+  loadCharactersFromServer(csrf);
 };
 
 var getToken = function getToken() {
@@ -238,20 +414,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#characterMessage").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
+  $("#characterMessage").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
-  $.ajax({
+  return $.ajax({
     cache: false,
     type: type,
     url: action,
@@ -263,6 +439,14 @@ var sendAjax = function sendAjax(type, action, data, success) {
       handleError(messageObj.error);
     }
   });
+};
+
+var getDND_Race_AB = function getDND_Race_AB(raceAPI, ability) {
+  var bonus = 0;
+  raceAPI.ability_bonuses.forEach(function (ab) {
+    if (ab.ability_score.index === ability) bonus = ab.bonus;
+  });
+  return bonus;
 }; // saves rolls and sum of n number of d-sided dice
 
 

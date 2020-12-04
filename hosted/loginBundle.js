@@ -2,7 +2,7 @@
 
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
+  $("#characterMessage").animate({
     width: 'hide'
   }, 350);
 
@@ -18,7 +18,7 @@ var handleLogin = function handleLogin(e) {
 
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
-  $("#domoMessage").animate({
+  $("#characterMessage").animate({
     width: 'hide'
   }, 350);
 
@@ -50,14 +50,14 @@ var LoginWindow = function LoginWindow(props) {
     id: "user",
     type: "text",
     name: "username",
-    placeholder: "username"
+    placeholder: "Username"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
-    placeholder: "password"
+    placeholder: "Password"
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -83,21 +83,21 @@ var SignupWindow = function SignupWindow(props) {
     id: "user",
     type: "text",
     name: "username",
-    placeholder: "username"
+    placeholder: "Username"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
-    placeholder: "password"
+    placeholder: "Password"
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass2"
-  }, "Password: "), /*#__PURE__*/React.createElement("input", {
+  }, "Confirm Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass2",
     type: "password",
     name: "pass2",
-    placeholder: "retype password"
+    placeholder: "Retype Password"
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -148,22 +148,34 @@ $(document).ready(function () {
 });
 "use strict";
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#characterMessage").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("#domoMessage").animate({
+  $("#characterMessage").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;
 };
 
 var sendAjax = function sendAjax(type, action, data, success) {
-  $.ajax({
+  return $.ajax({
     cache: false,
     type: type,
     url: action,
@@ -175,4 +187,41 @@ var sendAjax = function sendAjax(type, action, data, success) {
       handleError(messageObj.error);
     }
   });
+};
+
+var getDND_Race_AB = function getDND_Race_AB(raceAPI, ability) {
+  var bonus = 0;
+  raceAPI.ability_bonuses.forEach(function (ab) {
+    if (ab.ability_score.index === ability) bonus = ab.bonus;
+  });
+  return bonus;
+}; // saves rolls and sum of n number of d-sided dice
+
+
+var rollDice = function rollDice(n, d) {
+  var _rolls = [];
+
+  for (var i = 0; i < n; i++) {
+    var roll = Math.floor(Math.random() * d + 1);
+
+    _rolls.push(roll);
+  }
+
+  var _sum = _rolls.reduce(function (a, b) {
+    return a + b;
+  }, 0);
+
+  var results = {
+    rolls: _rolls,
+    sum: _sum
+  };
+  return results;
+}; // follow algorithm for determining ability score
+
+
+var rollForAbilityScore = function rollForAbilityScore() {
+  var results = rollDice(4, 6);
+  var _sum = results.sum;
+  _sum -= Math.min.apply(Math, _toConsumableArray(results.rolls));
+  return _sum;
 };

@@ -1,15 +1,15 @@
 const handleError = (message) => {
     $("#errorMessage").text(message);
-    $("#domoMessage").animate({width:'toggle'}, 350);
+    $("#characterMessage").animate({width:'toggle'}, 350);
 };
 
 const redirect = (response) => {
-    $("#domoMessage").animate({width:'hide'}, 350);
+    $("#characterMessage").animate({width:'hide'}, 350);
     window.location = response.redirect;
 };
 
 const sendAjax = (type, action, data, success) => {
-    $.ajax({
+    return $.ajax({
         cache: false,
         type: type,
         url: action,
@@ -21,6 +21,15 @@ const sendAjax = (type, action, data, success) => {
             handleError(messageObj.error);
         }
     });
+};
+
+const getDND_Race_AB = (raceAPI, ability) => {
+    let bonus = 0;
+    raceAPI.ability_bonuses.forEach(ab => {
+        if(ab.ability_score.index === ability) bonus = ab.bonus;
+    });
+
+    return bonus;
 };
 
 // saves rolls and sum of n number of d-sided dice

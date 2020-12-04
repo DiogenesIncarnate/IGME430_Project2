@@ -8,19 +8,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
-  <link rel="shortcut icon" href="/assets/img/favicon.png"/>
+  <link rel="shortcut icon" href="/assets/img/D&D_Ampersand.png"/>
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
-  <nav><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+  <nav><a href="/login"></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
+    <div class="navlink"><a id="passChangeButton" href="/passChange">Change Password</a></div>
   </nav>
-  <section id="makeCharacter">
+  <div id="content">
+<section id="makeCharacter">
   </section>
   <section id="characters">
   </section>
   <div id="characterMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box"/>
     <h3><span id="errorMessage"></span></h3><img id="character" src="assets/img/domo.png" alt="domo"/>
+  </div>
   </div>
   <script src="/assets/bundle.js"></script>
 </body>
