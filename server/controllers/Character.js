@@ -19,6 +19,32 @@ const makerPage = (req, res) => {
   });
 };
 
+const saveCharacter = (request, response) => {
+  const req = request;
+  const res = response;
+
+  // configure the conversion
+  try {
+    client.setDataString(JSON.stringify(req.body));
+  } catch (why) {
+  // report the error
+    console.error(`Pdfcrowd Error: ${why}`);
+    process.exit(1);
+  }
+
+  console.log(JSON.stringify(req.body));
+  // run the conversion and write the result to a file
+  client.convertStringToFile(
+    'Name: {{ name }}, Age: {{ age }}, Race: {{ race }}, Class: {{ className }}',
+    'output.pdf',
+    (err, fileName) => {
+      if (err) return console.error(`Pdfcrowd Error: ${err}`);
+      console.log(`Success: the file was created ${fileName}`);
+      return res.status(200).json({ success: 'Exported PDF to file!' });
+    },
+  );
+};
+
 const makeCharacter = (req, res) => {
   if (!req.body.name || !req.body.age) {
     return res
@@ -39,6 +65,8 @@ const makeCharacter = (req, res) => {
     classLevel: req.body.classLevel,
     owner: req.session.account._id,
   };
+
+  saveCharacter(req, res);
 
   const newCharacter = Character.CharacterModel(characterData);
 
@@ -73,34 +101,6 @@ const getCharacters = (request, response) => {
       return res.json({ characters: docs });
     },
   );
-};
-
-const saveCharacter = (request, response) => {
-  const req = request;
-  const res = response;
-
-  // configure the conversion
-  try {
-    client.setElementToConvert(req.body);
-  } catch (why) {
-    // report the error
-    console.error(`Pdfcrowd Error: ${why}`);
-    return res.status(400).json({ error: 'An error occurred.' });
-  }
-
-  const fileName = req.body.id || 'defaultCharacter';
-
-  // run the conversion and write the result to a file
-  client.convertUrlToFile(
-    'https://project2-jsr6181.herokuapp.com/maker',
-    `${fileName}.pdf`,
-    (err, f) => {
-      if (err) return console.error(`Pdfcrowd Error: ${err}`);
-      return console.log(`Success: the file was created ${f}`);
-    },
-  );
-
-  return res.status(400).json({ success: `Success: the file was created ${fileName}` });
 };
 
 module.exports.makerPage = makerPage;

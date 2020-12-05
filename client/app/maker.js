@@ -10,7 +10,7 @@ const handleCharacter = (e) => {
 
   sendAjax(
     "POST",
-    $("#characterForm").attr("action"),
+    e.target.getAttribute("action"),
     $("#characterForm").serialize(),
     function () {
       loadCharactersFromServer();
@@ -50,12 +50,13 @@ const handlePassChange = (e) => {
 
 const saveCharacter = (e) => {
   e.preventDefault();
+  const characterID = "#" + e.target.id;
 
   sendAjax(
     "POST",
-    $(`#${e.target.id}`).attr("action"),
-    $(`#${e.target.id}`).serialize(),
-    redirect
+    $(characterID).attr("action"),
+    $(characterID).serialize(),
+    null
   );
 };
 
@@ -85,7 +86,7 @@ const CharacterForm = (props) => {
         </div>
         <div className="characterForm_Section_Item">
           <label htmlFor="race">Race: </label>
-          <select id="characterRace" name="race">
+          <select id="characterFormRace" name="race">
             <option value="Dwarf">Dwarf</option>
             <option value="Elf">Elf</option>
             <option value="Halfling">Halfling</option>
@@ -101,7 +102,11 @@ const CharacterForm = (props) => {
       <div className="characterForm_Section">
         <div className="characterForm_Section_Item">
           <label htmlFor="className">Class: </label>
-          <select id="characterClassName" name="className" placeholder="Class">
+          <select
+            id="characterFormClassName"
+            name="className"
+            placeholder="Class"
+          >
             <option value="Barbarian">Barbarian</option>
             <option value="Bard">Bard</option>
             <option value="Cleric">Cleric</option>
@@ -152,11 +157,22 @@ const CharacterForm = (props) => {
       </div>
       <div className="characterForm_Section">
         <input type="hidden" name="_csrf" value={props.csrf} />
-        <input
-          className="makeCharacterSubmit"
-          type="submit"
-          value="Make Character"
-        />
+        <div className="characterForm_Section_Item">
+          <input
+            className="makeCharacterSubmit"
+            type="submit"
+            action="/maker"
+            value="Make Character"
+          />
+        </div>
+        <div className="characterForm_Section_Item">
+          <input
+            className="makeCharacterSubmit"
+            type="submit"
+            formaction="/saveCharacter"
+            value="Export to PDF"
+          />
+        </div>
       </div>
     </form>
   );
@@ -183,6 +199,7 @@ const CharacterList = function (props) {
         method="POST"
         className="character"
       >
+        <h3>Personal Information</h3>
         <div className="characterNode_Section">
           <div className="characterNode_Section_Item">
             <div id="characterName">Name: {character.name}</div>
@@ -199,6 +216,7 @@ const CharacterList = function (props) {
             </div>
           </div>
         </div>
+        <h3>Ability Scores (Base + Racial)</h3>
         <div id="characterNode_Section">
           <div className="characterNode_Section_Item">
             <div id="base_strength">
@@ -245,13 +263,10 @@ const CharacterList = function (props) {
             </div>
           </div>
         </div>
+        <h3>Miscellaneous</h3>
         <div className="characterNode_Section">
           <div className="characterNode_Section_Item">
             <div id="idField">ID: {character._id}</div>
-          </div>
-          <div className="characterNode_Section_Item">
-            <input type="hidden" name="_csrf" value={props.csrf} />
-            <input type="submit" value="Export to PDF" />
           </div>
         </div>
       </form>
@@ -366,7 +381,11 @@ const loadCharactersFromServer = (csrf) => {
     // load character list after all promises are fulfilled
     $.when.apply(null, promises).then(() => {
       ReactDOM.render(
-        <CharacterList csrf={csrf} dndData={results} characters={data.characters} />,
+        <CharacterList
+          csrf={csrf}
+          dndData={results}
+          characters={data.characters}
+        />,
         document.querySelector("#characters")
       );
     });
@@ -387,10 +406,12 @@ const setup = function (csrf) {
     document.querySelector("#makeCharacter")
   );
 
-  ReactDOM.render(
-    <CharacterList  dndData characters={[]} />,
-    document.querySelector("#characters")
-  );
+  const characterClass = document.querySelector("#characterFormClassName");
+
+  characterClass.addEventListener("change", (e) => {
+    e.preventDefault();
+    document.body.style.backgroundImage = "url('img/barbarian.jpg')";
+  });
 
   loadCharactersFromServer(csrf);
 };

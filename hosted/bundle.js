@@ -11,7 +11,7 @@ var handleCharacter = function handleCharacter(e) {
     return false;
   }
 
-  sendAjax("POST", $("#characterForm").attr("action"), $("#characterForm").serialize(), function () {
+  sendAjax("POST", e.target.getAttribute("action"), $("#characterForm").serialize(), function () {
     loadCharactersFromServer();
   });
   return false;
@@ -38,7 +38,8 @@ var handlePassChange = function handlePassChange(e) {
 
 var saveCharacter = function saveCharacter(e) {
   e.preventDefault();
-  sendAjax("POST", $("#".concat(e.target.id)).attr("action"), $("#".concat(e.target.id)).serialize(), redirect);
+  var characterID = "#" + e.target.id;
+  sendAjax("POST", $(characterID).attr("action"), $(characterID).serialize(), null);
 };
 
 var CharacterForm = function CharacterForm(props) {
@@ -74,7 +75,7 @@ var CharacterForm = function CharacterForm(props) {
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "race"
   }, "Race: "), /*#__PURE__*/React.createElement("select", {
-    id: "characterRace",
+    id: "characterFormRace",
     name: "race"
   }, /*#__PURE__*/React.createElement("option", {
     value: "Dwarf"
@@ -101,7 +102,7 @@ var CharacterForm = function CharacterForm(props) {
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "className"
   }, "Class: "), /*#__PURE__*/React.createElement("select", {
-    id: "characterClassName",
+    id: "characterFormClassName",
     name: "className",
     placeholder: "Class"
   }, /*#__PURE__*/React.createElement("option", {
@@ -192,11 +193,21 @@ var CharacterForm = function CharacterForm(props) {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
-  }), /*#__PURE__*/React.createElement("input", {
+  }), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("input", {
     className: "makeCharacterSubmit",
     type: "submit",
+    action: "/maker",
     value: "Make Character"
-  })));
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "makeCharacterSubmit",
+    type: "submit",
+    formaction: "/saveCharacter",
+    value: "Export to PDF"
+  }))));
 };
 
 var CharacterList = function CharacterList(props) {
@@ -218,7 +229,7 @@ var CharacterList = function CharacterList(props) {
       action: "/saveCharacter",
       method: "POST",
       className: "character"
-    }, /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("h3", null, "Personal Information"), /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section_Item"
@@ -236,7 +247,7 @@ var CharacterList = function CharacterList(props) {
       className: "characterNode_Section_Item"
     }, /*#__PURE__*/React.createElement("div", {
       id: "characterClassName"
-    }, "Class: ", character.className, ", ", character.classLevel))), /*#__PURE__*/React.createElement("div", {
+    }, "Class: ", character.className, ", ", character.classLevel))), /*#__PURE__*/React.createElement("h3", null, "Ability Scores (Base + Racial)"), /*#__PURE__*/React.createElement("div", {
       id: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section_Item"
@@ -258,22 +269,13 @@ var CharacterList = function CharacterList(props) {
       className: "characterNode_Section_Item"
     }, /*#__PURE__*/React.createElement("div", {
       id: "base_charisma"
-    }, "Cha:", " ", character.base_charisma + props.dndData[character.race].cha_bonus, " ", "(", character.base_charisma, " +", props.dndData[character.race].cha_bonus, ")"))), /*#__PURE__*/React.createElement("div", {
+    }, "Cha:", " ", character.base_charisma + props.dndData[character.race].cha_bonus, " ", "(", character.base_charisma, " +", props.dndData[character.race].cha_bonus, ")"))), /*#__PURE__*/React.createElement("h3", null, "Miscellaneous"), /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section_Item"
     }, /*#__PURE__*/React.createElement("div", {
       id: "idField"
-    }, "ID: ", character._id)), /*#__PURE__*/React.createElement("div", {
-      className: "characterNode_Section_Item"
-    }, /*#__PURE__*/React.createElement("input", {
-      type: "hidden",
-      name: "_csrf",
-      value: props.csrf
-    }), /*#__PURE__*/React.createElement("input", {
-      type: "submit",
-      value: "Export to PDF"
-    }))));
+    }, "ID: ", character._id))));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "characterList"
@@ -382,10 +384,11 @@ var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(CharacterForm, {
     csrf: csrf
   }), document.querySelector("#makeCharacter"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(CharacterList, {
-    dndData: true,
-    characters: []
-  }), document.querySelector("#characters"));
+  var characterClass = document.querySelector("#characterFormClassName");
+  characterClass.addEventListener("change", function (e) {
+    e.preventDefault();
+    document.body.style.backgroundImage = "url('img/barbarian.jpg')";
+  });
   loadCharactersFromServer(csrf);
 };
 

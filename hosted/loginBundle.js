@@ -3,26 +3,26 @@
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
   $("#characterMessage").animate({
-    width: 'hide'
+    width: "hide"
   }, 350);
 
-  if ($("user").val() == '' || $("pass").val() == '') {
+  if ($("user").val() == "" || $("pass").val() == "") {
     handleError("RAWR! Username or password is empty.");
     return false;
   }
 
   console.log($("input[name=_csrf]").val());
-  sendAjax('POST', $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
+  sendAjax("POST", $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
 };
 
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
   $("#characterMessage").animate({
-    width: 'hide'
+    width: "hide"
   }, 350);
 
-  if ($("username").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
+  if ($("username").val() == "" || $("#pass").val() == "" || $("#pass2").val() == "") {
     handleError("RAWR! All fields are required.");
     return false;
   }
@@ -32,7 +32,7 @@ var handleSignup = function handleSignup(e) {
     return false;
   }
 
-  sendAjax('POST', $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
+  sendAjax("POST", $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
   return false;
 };
 
@@ -44,6 +44,8 @@ var LoginWindow = function LoginWindow(props) {
     action: "/login",
     method: "POST",
     className: "mainForm"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "username"
   }, "Username: "), /*#__PURE__*/React.createElement("input", {
@@ -51,14 +53,18 @@ var LoginWindow = function LoginWindow(props) {
     type: "text",
     name: "username",
     placeholder: "Username"
-  }), /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
     placeholder: "Password"
-  }), /*#__PURE__*/React.createElement("input", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
@@ -66,7 +72,7 @@ var LoginWindow = function LoginWindow(props) {
     className: "formSubmit",
     type: "submit",
     value: "Sign in"
-  }));
+  })));
 };
 
 var SignupWindow = function SignupWindow(props) {
@@ -138,7 +144,7 @@ var setup = function setup(csrf) {
 };
 
 var getToken = function getToken() {
-  sendAjax('GET', '/getToken', null, function (result) {
+  sendAjax("GET", "/getToken", null, function (result) {
     setup(result.csrfToken);
   });
 };
