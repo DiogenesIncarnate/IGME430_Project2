@@ -48,16 +48,50 @@ const handlePassChange = (e) => {
   );
 };
 
-const saveCharacter = (e) => {
-  e.preventDefault();
-  const characterID = "#" + e.target.id;
+// Assumes your document using is `pt` units
+// If you're using any other unit (mm, px, etc.) use this gist to translate: https://gist.github.com/AnalyzePlatypus/55d806caa739ba6c2b27ede752fa3c9c
+function addWrappedText({text, textWidth, doc, fontSize = 10, fontType = 'normal', lineSpacing = 7, xPosition = 10, initialYPosition = 10, pageWrapInitialYPosition = 10}) {
+  doc.setFontType(fontType);
+  doc.setFontSize(fontSize);
+  var textLines = doc.splitTextToSize(text, textWidth); // Split the text into lines
+  var pageHeight = doc.internal.pageSize.height;        // Get page height, we'll use this for auto-paging. TRANSLATE this line if using units other than `pt`
+  var cursorY = initialYPosition;
 
-  sendAjax(
-    "POST",
-    $(characterID).attr("action"),
-    $(characterID).serialize(),
-    null
-  );
+  textLines.forEach(lineText => {
+    if (cursorY > pageHeight) { // Auto-paging
+      doc.addPage();
+      cursorY = pageWrapInitialYPosition;
+    }
+    doc.text(xPosition, cursorY, lineText);
+    cursorY += lineSpacing;
+  })
+}
+
+const exportToPDF = (e) => {
+  e.preventDefault();
+
+  const character = e.target.closest(".character");
+
+  var eh = {
+    '#languages': function (element, renderer) {
+      return true;
+    },
+    '#misc': function (element, renderer) {
+      return true;
+    },
+  };
+  let docW = 210;
+  const doc = new jsPDF([300, docW]);
+  let lMargin = 15, rMargin = 15;
+  doc.setProperties({
+    title: `CharacterSheet_${character.querySelector("#characterName").textContent.substring(6)}_${character.id}`,
+  });
+  doc.fromHTML(character, lMargin, rMargin, {"elementHandlers": eh});
+  addWrappedText({"text": character.querySelector("#languages").textContent, "doc": doc, "textWidth": (docW - rMargin * 2), "initialYPosition": 100, "xPosition": lMargin});
+  doc.addFont('ArialMS', 'Arial', 'normal');
+  doc.setFont('Arial');
+  doc.setFontSize(10);
+  window.open(doc.output('bloburl'));
 };
 
 const CharacterForm = (props) => {
@@ -165,14 +199,6 @@ const CharacterForm = (props) => {
             value="Make Character"
           />
         </div>
-        <div className="characterForm_Section_Item">
-          <input
-            className="makeCharacterSubmit"
-            type="submit"
-            formaction="/saveCharacter"
-            value="Export to PDF"
-          />
-        </div>
       </div>
     </form>
   );
@@ -190,12 +216,15 @@ const CharacterList = function (props) {
   }
 
   const characterNodes = props.characters.map(function (character) {
+    const languages = [];
+    props.dndData[character.race]["languages"].forEach((lang) => {
+      languages.push(<li>{lang["name"]}</li>);
+    });
     return (
       <form
         id={character._id}
-        onSubmit={saveCharacter}
+        onSubmit={exportToPDF}
         name="character"
-        action="/saveCharacter"
         method="POST"
         className="character"
       >
@@ -263,12 +292,34 @@ const CharacterList = function (props) {
             </div>
           </div>
         </div>
+        <h3>Racial Features</h3>
+        <div className="characterNode_Section">
+          <div className="characterNode_Section_Item">
+            <div>{languages}</div>
+              <div id="languages">{props.dndData[character.race].language_desc}</div>
+          </div>
+        </div>
+        <span id="misc">
         <h3>Miscellaneous</h3>
         <div className="characterNode_Section">
           <div className="characterNode_Section_Item">
             <div id="idField">ID: {character._id}</div>
           </div>
+          <div className="characterNode_Section_Item">
+            <input
+              type="hidden"
+              className="csrfToken"
+              name="_csrf"
+              value={props.csrf}
+            />
+            <input
+              type="submit"
+              className="exportToPDFButton"
+              value="Export to PDF"
+            />
+          </div>
         </div>
+        </span>
       </form>
     );
   });
@@ -373,6 +424,18 @@ const loadCharactersFromServer = (csrf) => {
               results[res.name],
               "cha"
             );
+            res.languages.forEach((lang) => {
+              promises.push(
+                sendAjax(
+                  "GET",
+                  `https://www.dnd5eapi.co${lang.url}`,
+                  null,
+                  (langRes) => {
+                    console.log(JSON.stringify(langRes));
+                  }
+                )
+              );
+            });
           }
         )
       );
@@ -394,7 +457,11 @@ const loadCharactersFromServer = (csrf) => {
 
 const setup = function (csrf) {
   const passChangeButton = document.querySelector("#passChangeButton");
+  const allExportToPDFButtons = document.querySelectorAll(".exportToPDFButton");
 
+  allExportToPDFButtons.forEach((btn) => {
+    btn.addEventListener("click", exportToPDF);
+  });
   passChangeButton.addEventListener("click", (e) => {
     e.preventDefault();
     createPassChangeWindow(csrf);
@@ -405,13 +472,6 @@ const setup = function (csrf) {
     <CharacterForm csrf={csrf} />,
     document.querySelector("#makeCharacter")
   );
-
-  const characterClass = document.querySelector("#characterFormClassName");
-
-  characterClass.addEventListener("change", (e) => {
-    e.preventDefault();
-    document.body.style.backgroundImage = "url('img/barbarian.jpg')";
-  });
 
   loadCharactersFromServer(csrf);
 };

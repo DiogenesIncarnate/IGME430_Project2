@@ -219,7 +219,7 @@ select:after{
 }
 
 .character {
-    width: auto;
+    width: 15vw;
     height: 10vw;
     margin: 0.5vw;
     border: 0.05vw solid gray;
@@ -239,6 +239,10 @@ select:after{
     background-color: darkgrey;
 }
 
+#languages{
+    word-wrap: break-word;
+}
+
 img.characterFace {
     margin-left: 25px;
     margin-right: 10px;
@@ -255,8 +259,8 @@ img.characterFace {
     flex-direction: row;
     flex-wrap: wrap;
     width: auto;
-    height: 15%;
-    margin: auto;
+    height: auto;
+    margin: 0.2vw auto;
 }
 
 .character h3{
@@ -264,7 +268,6 @@ img.characterFace {
 }
 
 .characterNode_Section_Item{
-    display: inline-flex;
     width: auto;
     margin: auto 2%;
     text-align: center;

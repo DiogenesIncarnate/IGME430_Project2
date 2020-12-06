@@ -34,12 +34,77 @@ var handlePassChange = function handlePassChange(e) {
   }
 
   sendAjax("POST", $("#passChangeForm").attr("action"), $("#passChangeForm").serialize(), redirect);
-};
+}; // Assumes your document using is `pt` units
+// If you're using any other unit (mm, px, etc.) use this gist to translate: https://gist.github.com/AnalyzePlatypus/55d806caa739ba6c2b27ede752fa3c9c
 
-var saveCharacter = function saveCharacter(e) {
+
+function addWrappedText(_ref) {
+  var text = _ref.text,
+      textWidth = _ref.textWidth,
+      doc = _ref.doc,
+      _ref$fontSize = _ref.fontSize,
+      fontSize = _ref$fontSize === void 0 ? 10 : _ref$fontSize,
+      _ref$fontType = _ref.fontType,
+      fontType = _ref$fontType === void 0 ? 'normal' : _ref$fontType,
+      _ref$lineSpacing = _ref.lineSpacing,
+      lineSpacing = _ref$lineSpacing === void 0 ? 7 : _ref$lineSpacing,
+      _ref$xPosition = _ref.xPosition,
+      xPosition = _ref$xPosition === void 0 ? 10 : _ref$xPosition,
+      _ref$initialYPosition = _ref.initialYPosition,
+      initialYPosition = _ref$initialYPosition === void 0 ? 10 : _ref$initialYPosition,
+      _ref$pageWrapInitialY = _ref.pageWrapInitialYPosition,
+      pageWrapInitialYPosition = _ref$pageWrapInitialY === void 0 ? 10 : _ref$pageWrapInitialY;
+  doc.setFontType(fontType);
+  doc.setFontSize(fontSize);
+  var textLines = doc.splitTextToSize(text, textWidth); // Split the text into lines
+
+  var pageHeight = doc.internal.pageSize.height; // Get page height, we'll use this for auto-paging. TRANSLATE this line if using units other than `pt`
+
+  var cursorY = initialYPosition;
+  textLines.forEach(function (lineText) {
+    if (cursorY > pageHeight) {
+      // Auto-paging
+      doc.addPage();
+      cursorY = pageWrapInitialYPosition;
+    }
+
+    doc.text(xPosition, cursorY, lineText);
+    cursorY += lineSpacing;
+  });
+}
+
+var exportToPDF = function exportToPDF(e) {
   e.preventDefault();
-  var characterID = "#" + e.target.id;
-  sendAjax("POST", $(characterID).attr("action"), $(characterID).serialize(), null);
+  var character = e.target.closest(".character");
+  var eh = {
+    '#languages': function languages(element, renderer) {
+      return true;
+    },
+    '#misc': function misc(element, renderer) {
+      return true;
+    }
+  };
+  var docW = 210;
+  var doc = new jsPDF([300, docW]);
+  var lMargin = 15,
+      rMargin = 15;
+  doc.setProperties({
+    title: "CharacterSheet_".concat(character.querySelector("#characterName").textContent.substring(6), "_").concat(character.id)
+  });
+  doc.fromHTML(character, lMargin, rMargin, {
+    "elementHandlers": eh
+  });
+  addWrappedText({
+    "text": character.querySelector("#languages").textContent,
+    "doc": doc,
+    "textWidth": docW - rMargin * 2,
+    "initialYPosition": 100,
+    "xPosition": lMargin
+  });
+  doc.addFont('ArialMS', 'Arial', 'normal');
+  doc.setFont('Arial');
+  doc.setFontSize(10);
+  window.open(doc.output('bloburl'));
 };
 
 var CharacterForm = function CharacterForm(props) {
@@ -200,13 +265,6 @@ var CharacterForm = function CharacterForm(props) {
     type: "submit",
     action: "/maker",
     value: "Make Character"
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "characterForm_Section_Item"
-  }, /*#__PURE__*/React.createElement("input", {
-    className: "makeCharacterSubmit",
-    type: "submit",
-    formaction: "/saveCharacter",
-    value: "Export to PDF"
   }))));
 };
 
@@ -222,11 +280,14 @@ var CharacterList = function CharacterList(props) {
   }
 
   var characterNodes = props.characters.map(function (character) {
+    var languages = [];
+    props.dndData[character.race]["languages"].forEach(function (lang) {
+      languages.push( /*#__PURE__*/React.createElement("li", null, lang["name"]));
+    });
     return /*#__PURE__*/React.createElement("form", {
       id: character._id,
-      onSubmit: saveCharacter,
+      onSubmit: exportToPDF,
       name: "character",
-      action: "/saveCharacter",
       method: "POST",
       className: "character"
     }, /*#__PURE__*/React.createElement("h3", null, "Personal Information"), /*#__PURE__*/React.createElement("div", {
@@ -269,13 +330,32 @@ var CharacterList = function CharacterList(props) {
       className: "characterNode_Section_Item"
     }, /*#__PURE__*/React.createElement("div", {
       id: "base_charisma"
-    }, "Cha:", " ", character.base_charisma + props.dndData[character.race].cha_bonus, " ", "(", character.base_charisma, " +", props.dndData[character.race].cha_bonus, ")"))), /*#__PURE__*/React.createElement("h3", null, "Miscellaneous"), /*#__PURE__*/React.createElement("div", {
+    }, "Cha:", " ", character.base_charisma + props.dndData[character.race].cha_bonus, " ", "(", character.base_charisma, " +", props.dndData[character.race].cha_bonus, ")"))), /*#__PURE__*/React.createElement("h3", null, "Racial Features"), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("div", null, languages), /*#__PURE__*/React.createElement("div", {
+      id: "languages"
+    }, props.dndData[character.race].language_desc))), /*#__PURE__*/React.createElement("span", {
+      id: "misc"
+    }, /*#__PURE__*/React.createElement("h3", null, "Miscellaneous"), /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section_Item"
     }, /*#__PURE__*/React.createElement("div", {
       id: "idField"
-    }, "ID: ", character._id))));
+    }, "ID: ", character._id)), /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "hidden",
+      className: "csrfToken",
+      name: "_csrf",
+      value: props.csrf
+    }), /*#__PURE__*/React.createElement("input", {
+      type: "submit",
+      className: "exportToPDFButton",
+      value: "Export to PDF"
+    })))));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "characterList"
@@ -361,6 +441,11 @@ var loadCharactersFromServer = function loadCharactersFromServer(csrf) {
         results[res.name]["con_bonus"] = getDND_Race_AB(results[res.name], "con");
         results[res.name]["wis_bonus"] = getDND_Race_AB(results[res.name], "wis");
         results[res.name]["cha_bonus"] = getDND_Race_AB(results[res.name], "cha");
+        res.languages.forEach(function (lang) {
+          promises.push(sendAjax("GET", "https://www.dnd5eapi.co".concat(lang.url), null, function (langRes) {
+            console.log(JSON.stringify(langRes));
+          }));
+        });
       }));
     }); // load character list after all promises are fulfilled
 
@@ -376,6 +461,10 @@ var loadCharactersFromServer = function loadCharactersFromServer(csrf) {
 
 var setup = function setup(csrf) {
   var passChangeButton = document.querySelector("#passChangeButton");
+  var allExportToPDFButtons = document.querySelectorAll(".exportToPDFButton");
+  allExportToPDFButtons.forEach(function (btn) {
+    btn.addEventListener("click", exportToPDF);
+  });
   passChangeButton.addEventListener("click", function (e) {
     e.preventDefault();
     createPassChangeWindow(csrf);
@@ -384,11 +473,6 @@ var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(CharacterForm, {
     csrf: csrf
   }), document.querySelector("#makeCharacter"));
-  var characterClass = document.querySelector("#characterFormClassName");
-  characterClass.addEventListener("change", function (e) {
-    e.preventDefault();
-    document.body.style.backgroundImage = "url('img/barbarian.jpg')";
-  });
   loadCharactersFromServer(csrf);
 };
 
