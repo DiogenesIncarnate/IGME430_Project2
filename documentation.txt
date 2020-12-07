@@ -1,0 +1,18 @@
+Site Purpose:
+	This site allows the user to fill a form of basic character sheet values. Upon submitting, the site will generate a model with the character sheet data, along with some extrapolated information from a D&D API. A user who has a premium account will have the option to export this information to a PDF.
+
+Programming Features:
+	React components are used to render each character's model, the means of logging in and signing up an account, as well as the current account's data, and navigation between all of these. The data is stored in the form of accounts and characters with a reference to the id of their owning account. Handlebars is used to display general navigation and content blocks, as well as import some relevant JS Libraries.
+
+Endpoints:
+	/getToken
+	/getCharacters - Gets all of the characters for the current account
+	/login - Loads the character/account data for the given account
+	/signup - Creates a new account model
+	/logout - Logs out of the current account
+	/passChange - Changes the password of the current session account
+	/getPremiumStatus - Gets only isPremium truth value
+	/getAccountInfo - Get all account info of the current session
+	/changePremiumStatus - Updates the account info, specifically isPremium truth value
+	/maker - Renders the app of characters data
+	/ - Defaults to login page

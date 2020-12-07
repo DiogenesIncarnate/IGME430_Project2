@@ -2,6 +2,7 @@ const models = require('../models');
 
 const { Character } = models;
 
+// render the app and its main content
 const makerPage = (req, res) => {
   Character.CharacterModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
@@ -13,12 +14,15 @@ const makerPage = (req, res) => {
   });
 };
 
+// creates a new character and ties it to the current account
 const makeCharacter = (req, res) => {
   if (!req.body.name || !req.body.age) {
     return res
       .status(400)
-      .json({ error: 'RAWR! Both name and age are required' });
+      .json({ error: 'Both name and age are required' });
   }
+
+  console.log(JSON.stringify(req.body));
 
   const characterData = {
     name: req.body.name,
@@ -52,6 +56,7 @@ const makeCharacter = (req, res) => {
   return characterPromise;
 };
 
+// get all characters for the current account
 const getCharacters = (request, response) => {
   const req = request;
   const res = response;

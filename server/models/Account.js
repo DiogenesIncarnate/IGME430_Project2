@@ -24,6 +24,11 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isPremium: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
@@ -33,9 +38,11 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = (doc) => ({
   // _id is built into your mongo document and is guaranteed to be unique
   username: doc.username,
+  isPremium: doc.isPremium,
   _id: doc._id,
 });
 
+// ensures password exists for the given doc's account
 const validatePassword = (doc, password, callback) => {
   const pass = doc.password;
 
@@ -47,6 +54,7 @@ const validatePassword = (doc, password, callback) => {
   });
 };
 
+// filters accounts by the given username
 AccountSchema.statics.findByUsername = (name, callback) => {
   const search = {
     username: name,
@@ -55,12 +63,14 @@ AccountSchema.statics.findByUsername = (name, callback) => {
   return AccountModel.findOne(search, callback);
 };
 
+// encrypts password
 AccountSchema.statics.generateHash = (password, callback) => {
   const salt = crypto.randomBytes(saltLength);
 
   crypto.pbkdf2(password, salt, iterations, keyLength, 'RSA-SHA512', (err, hash) => callback(salt, hash.toString('hex')));
 };
 
+// ensures login account is valid
 AccountSchema.statics.authenticate = (username, password, callback) => {
   AccountModel.findByUsername(username, (err, doc) => {
     if (err) {

@@ -1,3 +1,4 @@
+// sends the login form data to the server to login account controller
 const handleLogin = (e) => {
   e.preventDefault();
 
@@ -20,6 +21,7 @@ const handleLogin = (e) => {
   return false;
 };
 
+// sends signup form account data to be created in the account controller
 const handleSignup = (e) => {
   e.preventDefault();
 
@@ -30,12 +32,12 @@ const handleSignup = (e) => {
     $("#pass").val() == "" ||
     $("#pass2").val() == ""
   ) {
-    handleError("RAWR! All fields are required.");
+    handleError("All fields are required.");
     return false;
   }
 
   if ($("#pass").val() != $("#pass2").val()) {
-    handleError("RAWR! Passwords do not match.");
+    handleError("Passwords do not match.");
     return false;
   }
 
@@ -49,6 +51,7 @@ const handleSignup = (e) => {
   return false;
 };
 
+// format login window react component
 const LoginWindow = (props) => {
   return (
     <form
@@ -75,6 +78,7 @@ const LoginWindow = (props) => {
   );
 };
 
+// format signup window react component
 const SignupWindow = (props) => {
   return (
     <form
@@ -85,19 +89,32 @@ const SignupWindow = (props) => {
       method="POST"
       className="mainForm"
     >
-      <label htmlFor="username">Username: </label>
-      <input id="user" type="text" name="username" placeholder="Username" />
-      <label htmlFor="pass">Password: </label>
-      <input id="pass" type="password" name="pass" placeholder="Password" />
-      <label htmlFor="pass2">Confirm Password: </label>
-      <input
-        id="pass2"
-        type="password"
-        name="pass2"
-        placeholder="Retype Password"
-      />
-      <input type="hidden" name="_csrf" value={props.csrf} />
-      <input className="formSubmit" type="submit" value="Sign Up" />
+      <div className="mainForm_Section">
+        <label htmlFor="username">Username: </label>
+        <input className="mainForm_Value" id="user" type="text" name="username" placeholder="Username" />
+      </div>
+      <div className="mainForm_Section">
+        <label htmlFor="pass">Password: </label>
+        <input className="mainForm_Value" id="pass" type="password" name="pass" placeholder="Password" />
+      </div>
+      <div className="mainForm_Section">
+        <label htmlFor="pass2">Confirm Password: </label>
+        <input
+          className="mainForm_Value" 
+          id="pass2"
+          type="password"
+          name="pass2"
+          placeholder="Retype Password"
+        />
+      </div>
+      <div className="mainForm_Section">
+        <label htmlFor="isPremium">"Purchase" Premium Account: </label>
+        <input className="mainForm_Value" id="isPremium" name="isPremium" type="checkbox" />
+      </div>
+      <div className="mainForm_Section">
+        <input type="hidden" name="_csrf" value={props.csrf} />
+        <input className="formSubmit" type="submit" value="Sign Up" />
+      </div>
     </form>
   );
 };
@@ -116,6 +133,7 @@ const createSignupWindow = (csrf) => {
   );
 };
 
+// assigns default event handlers and react renders
 const setup = (csrf) => {
   const loginButton = document.querySelector("#loginButton");
   const signupButton = document.querySelector("#signupButton");

@@ -6,36 +6,36 @@ html, body {
     overflow-x: hidden;
 }
 
-body::after{
-  content: "";
-  background: url(img/party.jpg);
-  background-size: cover;
-  opacity: 0.5;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  position: absolute;
-  z-index: -1;  
+body::after {
+    content: "";
+    background: url(img/party.jpg);
+    background-size: cover;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -2;
 }
 
-@font-face{
+@font-face {
     font-family: "D&D";
     src: url(fonts/Friz\ Quadrata\ Bold.otf);
 }
 
-@font-face{
+@font-face {
     font-family: "D&D_Body";
     src: url(fonts/Scala_SansRegular_LF.ttf);
 }
 
-@font-face{
+@font-face {
     font-family: "D&D_Body";
     src: url(fonts/Scala-Sans-Bold-LF_39547.ttf);
     font-style: bold;
 }
 
-@font-face{
+@font-face {
     font-family: "D&D_Body";
     src: url(fonts/ScalaSansItalic.ttf);
     font-style: italic;
@@ -45,42 +45,66 @@ body::after{
     height: 40px;
     width: 40;
     padding-top: 5px;
-    float:left;
+    float: left;
     border-radius: 8px;
 }
 
 nav {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
     position: absolute;
     width: 100%;
     height: auto;
     padding: 1vw;
-    background-color: black;
     font-family: "D&D";
+    z-index: 1;
 }
 
-nav:nth-child(1) {
-    padding-left: 25px;
+nav::after {
+    content: "";
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+    box-shadow: 0 0 2vw 2vw black;
+    background-color: black;
+}
+
+nav .navlink {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    width: 25%;
+    text-align: center;
 }
 
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
-select option{
+input[type=checkbox] {
+    border-radius: 0.5vw;
+}
+
+select option {
     background-color: lightgrey;
 }
 
-select:after{
+select:after {
     color: black;
 }
 
 .navlink {
-    padding: 5px;
-    padding-top: 12px;
-    padding-left: 20px;
+    padding: 0.1vw;
+    padding-top: 0.2vw;
+    padding-left: 0.5vw;
     color: white;
     font-size: 10%;
     float: left;
@@ -88,8 +112,8 @@ select:after{
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
     color: white;
-    padding: 5px;
-    border-radius: 4px;
+    padding: 0.5vw;
+    border-radius: 0.1vw;
     background-color: gray;
     font-size: 1vw;
     text-decoration: none;
@@ -98,16 +122,16 @@ select:after{
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
-    background-color: darkgrey;
+    background-color: red;
 }
 
-#content{
+#content {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-#makeCharacter{
+#makeCharacter {
     text-align: center;
 }
 
@@ -116,11 +140,11 @@ select:after{
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    height: 80%;
+    height: 70%;
     width: auto;
-    margin-top: 7.5vw;
+    margin-top: 6vw;
     margin-left: 2vw;
-    padding: 1vw;
+    padding: 0.5vw;
     border: 2px solid gray;
     border-radius: 0.5vw;
     background-color: black;
@@ -140,7 +164,7 @@ select:after{
 }
 
 .characterForm input[type=number], .characterForm input[type=text], .characterForm select {
-    float:left;
+    float: left;
     width: 10vw;
     height: 2vw;
     margin: auto 0.5vw;
@@ -153,28 +177,28 @@ select:after{
     transition: all 0.4s ease;
 }
 
-.characterForm select{
+.characterForm select {
     text-align-last: center;
 }
 
-.characterForm input[type=number]{
+.characterForm input[type=number] {
     width: 4vw;
     font-size: 1.5vw;
 }
 
-.characterForm input[type=select]:hover, .characterForm input[type=number]:hover, .characterForm input[type=text]:hover{
+.characterForm input[type=select]:hover, .characterForm input[type=number]:hover, .characterForm input[type=text]:hover {
     background-color: transparent;
     color: white;
 }
 
 .characterForm_Section {
     width: 100%;
-    height: 25%;
-    margin: 10% auto;
+    height: auto;
+    margin: auto;
     text-align: center;
 }
 
-.characterForm_Section_Item{
+.characterForm_Section_Item {
     display: flex;
     align-self: stretch;
     height: auto;
@@ -182,7 +206,7 @@ select:after{
     margin: 0.5vw auto;
 }
 
-.characterForm input[type=submit]{
+.characterForm .btn {
     transition: background-color 0.4s ease;
     width: auto;
     height: auto;
@@ -205,16 +229,17 @@ select:after{
     opacity: 1;
 }
 
-.characterList{
+.characterList {
     position: relative;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     width: 75vw;
-    height: auto;
+    height: 60%;
     margin-top: 7.5vw;
     margin-left: 22vw;
     padding: 0.5vw;
+    overflow: hidden;
     overflow-y: auto;
 }
 
@@ -234,12 +259,12 @@ select:after{
 
 .character:hover {
     transition: border-color 0.2s ease-out;
-    border-color: rgba(0,0,0, 0.8);
+    border-color: rgba(0, 0, 0, 0.8);
     transition: background-color 2.6s ease-out;
     background-color: darkgrey;
 }
 
-#languages{
+#languages {
     word-wrap: break-word;
 }
 
@@ -249,11 +274,11 @@ img.characterFace {
     height: 50px;
     width: 50px;
     border-radius: 4px;
-    margin-top:10px;
-    float:left;
+    margin-top: 10px;
+    float: left;
 }
 
-.characterNode_Section, .character h3{
+.characterNode_Section, .character h3 {
     display: flex;
     justify-content: center;
     flex-direction: row;
@@ -263,14 +288,78 @@ img.characterFace {
     margin: 0.2vw auto;
 }
 
-.character h3{
+.character h3 {
     margin-top: 0.5vw;
 }
 
-.characterNode_Section_Item{
+.characterNode_Section_Item {
     width: auto;
     margin: auto 2%;
     text-align: center;
+}
+
+#pageFooter footer {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15%;
+    padding: 1vw;
+    color: white;
+    font-family: "D&D";
+    font-size: 0.75vw;
+}
+
+#pageFooter footer::after {
+    content: "";
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
+    background-color: black;
+    box-shadow: 0 0 2vw 2vw black;
+}
+
+#pageFooter h3 {
+    color: red;
+}
+
+#pageFooter a {
+    text-decoration: none;
+    transition: 0.4s ease;
+    color: #cc00ff;
+}
+
+#pageFooter a:hover {
+    color: goldenrod;
+}
+
+.footer_Section {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: auto;
+    height: auto;
+    margin: auto;
+    padding: 0.5vw;
+    background-color: gray;
+    border-radius: 0.2vw;
+    text-align: center;
+}
+
+.footer_Section_Item {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    margin: 0;
+    width: auto;
 }
 
 .mainForm {
@@ -285,14 +374,16 @@ img.characterFace {
     font-size: 1.5vw;
 }
 
-.mainForm_Section{
+.mainForm_Section {
     display: flex;
+    width: auto;
+    margin: 0 1vw;
     justify-content: center;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-wrap: nowrap;
 }
 
-.mainForm #user, #pass, #pass2, #newPass, #newPass2{
+.mainForm #user, #pass, #pass2, #newPass, #newPass2 {
     width: 15vw;
     height: 2vw;
     margin: auto;
@@ -300,17 +391,18 @@ img.characterFace {
     font-size: 1vw;
 }
 
-.mainForm label{
-    width: 15vw;
+.mainForm label {
+    width: auto;
     height: 3vw;
     margin: auto;
     padding-top: 1.5vw;
     text-align: center;
-    font-size: 1vw;
+    font-size: 1.5vw;
+    color: red;
 }
 
-.mainForm input[type=text]{
-    float:left;
+.mainForm input[type=text] {
+    float: left;
     width: 10vw;
     height: 2vw;
     margin: auto 0.5vw;
@@ -321,6 +413,13 @@ img.characterFace {
     font-size: 1.5vw;
     text-align: center;
     transition: all 0.4s ease;
+}
+
+.mainForm_Value {
+    width: 15vw;
+    height: 3vw;
+    text-align: center;
+    font-size: 1vw;
 }
 
 .formSubmit {
@@ -342,16 +441,16 @@ img.characterFace {
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: darkgrey;
+    background-color: goldenrod;
 }
 
-#user:focus, #pass:focus, #pass2:focus, #newPass:focus, #newPass2:focus{
+#user:focus, #pass:focus, #pass2:focus, #newPass:focus, #newPass2:focus {
     outline: none;
     box-shadow: 0px 0px 1px 1px black;
 }
 
 #characterMessage {
-    display:none;
+    display: none;
     top: 250px;
     width: 250px;
     height: 650px;
@@ -371,12 +470,14 @@ img.characterFace {
 #speech {
     height: 120px;
     width: 250px;
-    z-index:300;
+    z-index: 300;
 }
 
 #errorMessage {
-    font-size: 1.2em;
+    text-align: center;
+    margin: auto;
+    font-size: 1vw;
     font-weight: bold;
-    color: red;
-    font-style: italic;
+    font-family: "D&D";
+    color: blue;
 }

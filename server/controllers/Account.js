@@ -11,6 +11,7 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
+// generates a new password for the current session account
 const passChange = (request, response) => {
   const req = request;
   const res = response;
@@ -55,7 +56,7 @@ const passChange = (request, response) => {
           req.session.account,
           { upsert: true },
           (updateErr) => {
-            if (updateErr) return res.send(500, { error: updateErr });
+            if (updateErr) return res.status(500).json({ error: updateErr });
 
             console.log(
               `Password changed from ${password} to ${req.body.newPass}`,
@@ -118,6 +119,7 @@ const signup = (request, response) => {
       username: req.body.username,
       salt,
       password: hash,
+      isPremium: req.body.isPremium === 'on',
     };
 
     const newAccount = new Account.AccountModel(accountData);
@@ -140,6 +142,40 @@ const signup = (request, response) => {
   });
 };
 
+// returns all properties of the current session's account
+const getAccountInfo = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.findById(req.session.account._id, (err, acc) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred.' });
+    }
+
+    return res.json({
+      username: acc.username,
+      isPremium: acc.isPremium,
+      createdDate: acc.createdDate,
+    });
+  });
+};
+
+// gets only the premium status of the current account
+const getPremiumStatus = (request, response) => {
+  const req = request;
+  const res = response;
+
+  return Account.AccountModel.findById(req.session.account._id, (err, acc) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred.' });
+    }
+
+    return res.json({ isPremium: acc ? acc.isPremium : false });
+  });
+};
+
 const getToken = (request, response) => {
   const req = request;
   const res = response;
@@ -151,9 +187,37 @@ const getToken = (request, response) => {
   res.json(csrfJSON);
 };
 
+// changes the premium status, and in the future,
+// any other account data based on the account info form
+const changePremiumStatus = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const oldPremium = req.session.account.isPremium;
+  console.log(`Premium is ${JSON.stringify(req.body)}`);
+  req.session.account.isPremium = req.body.isPremium === 'on';
+  const query = { _id: req.session.account._id };
+  return Account.AccountModel.findOneAndUpdate(
+    query,
+    req.session.account,
+    { upsert: true },
+    (updateErr) => {
+      if (updateErr) return res.status(500).json({ error: updateErr });
+
+      console.log(
+        `Premium status went from ${oldPremium} to ${req.session.account.isPremium}`,
+      );
+      return res.json({ redirect: '/maker' });
+    },
+  );
+};
+
 module.exports.loginPage = loginPage;
 module.exports.passChange = passChange;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
+module.exports.getPremiumStatus = getPremiumStatus;
+module.exports.getAccountInfo = getAccountInfo;
+module.exports.changePremiumStatus = changePremiumStatus;
 module.exports.getToken = getToken;

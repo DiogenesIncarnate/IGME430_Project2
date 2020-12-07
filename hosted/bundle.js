@@ -1,21 +1,23 @@
 "use strict";
 
+// sends character form data to be added to character models
 var handleCharacter = function handleCharacter(e) {
   e.preventDefault();
-  $("characterMessage").animate({
+  $("#characterMessage").animate({
     width: "hide"
   }, 350);
 
-  if ($("characterName").val() == "" || $("#characterAge").val() == "") {
+  if ($("#characterName").val() == "" || $("#characterAge").val() == "") {
     handleError("All fields are required.");
     return false;
   }
 
   sendAjax("POST", e.target.getAttribute("action"), $("#characterForm").serialize(), function () {
-    loadCharactersFromServer();
+    loadCharactersFromServer($("#characterForm")._csrf);
   });
   return false;
-};
+}; // send new password info to account controller to be updated
+
 
 var handlePassChange = function handlePassChange(e) {
   e.preventDefault();
@@ -29,58 +31,31 @@ var handlePassChange = function handlePassChange(e) {
   }
 
   if ($("#newPass").val() != $("#newPass2").val()) {
-    handleError("RAWR! Passwords do not match.");
+    handleError("Passwords do not match.");
     return false;
   }
 
   sendAjax("POST", $("#passChangeForm").attr("action"), $("#passChangeForm").serialize(), redirect);
-}; // Assumes your document using is `pt` units
-// If you're using any other unit (mm, px, etc.) use this gist to translate: https://gist.github.com/AnalyzePlatypus/55d806caa739ba6c2b27ede752fa3c9c
+}; // send account info (premium) to be edited
 
 
-function addWrappedText(_ref) {
-  var text = _ref.text,
-      textWidth = _ref.textWidth,
-      doc = _ref.doc,
-      _ref$fontSize = _ref.fontSize,
-      fontSize = _ref$fontSize === void 0 ? 10 : _ref$fontSize,
-      _ref$fontType = _ref.fontType,
-      fontType = _ref$fontType === void 0 ? 'normal' : _ref$fontType,
-      _ref$lineSpacing = _ref.lineSpacing,
-      lineSpacing = _ref$lineSpacing === void 0 ? 7 : _ref$lineSpacing,
-      _ref$xPosition = _ref.xPosition,
-      xPosition = _ref$xPosition === void 0 ? 10 : _ref$xPosition,
-      _ref$initialYPosition = _ref.initialYPosition,
-      initialYPosition = _ref$initialYPosition === void 0 ? 10 : _ref$initialYPosition,
-      _ref$pageWrapInitialY = _ref.pageWrapInitialYPosition,
-      pageWrapInitialYPosition = _ref$pageWrapInitialY === void 0 ? 10 : _ref$pageWrapInitialY;
-  doc.setFontType(fontType);
-  doc.setFontSize(fontSize);
-  var textLines = doc.splitTextToSize(text, textWidth); // Split the text into lines
+var handleAccountInfo = function handleAccountInfo(e) {
+  e.preventDefault();
 
-  var pageHeight = doc.internal.pageSize.height; // Get page height, we'll use this for auto-paging. TRANSLATE this line if using units other than `pt`
+  if (document.querySelector("#accountChanged").value === "true") {
+    sendAjax("POST", $("#accountForm").attr("action"), $("#accountForm").serialize(), redirect);
+  }
+}; // format and export pdf using JS library
 
-  var cursorY = initialYPosition;
-  textLines.forEach(function (lineText) {
-    if (cursorY > pageHeight) {
-      // Auto-paging
-      doc.addPage();
-      cursorY = pageWrapInitialYPosition;
-    }
-
-    doc.text(xPosition, cursorY, lineText);
-    cursorY += lineSpacing;
-  });
-}
 
 var exportToPDF = function exportToPDF(e) {
   e.preventDefault();
   var character = e.target.closest(".character");
   var eh = {
-    '#languages': function languages(element, renderer) {
+    "#languages": function languages(element, renderer) {
       return true;
     },
-    '#misc': function misc(element, renderer) {
+    "#misc": function misc(element, renderer) {
       return true;
     }
   };
@@ -92,20 +67,29 @@ var exportToPDF = function exportToPDF(e) {
     title: "CharacterSheet_".concat(character.querySelector("#characterName").textContent.substring(6), "_").concat(character.id)
   });
   doc.fromHTML(character, lMargin, rMargin, {
-    "elementHandlers": eh
+    elementHandlers: eh
   });
   addWrappedText({
-    "text": character.querySelector("#languages").textContent,
-    "doc": doc,
-    "textWidth": docW - rMargin * 2,
-    "initialYPosition": 100,
-    "xPosition": lMargin
+    text: character.querySelector("#languages").textContent,
+    doc: doc,
+    textWidth: docW - rMargin * 2,
+    initialYPosition: 100,
+    xPosition: lMargin
   });
-  doc.addFont('ArialMS', 'Arial', 'normal');
-  doc.setFont('Arial');
   doc.setFontSize(10);
-  window.open(doc.output('bloburl'));
-};
+  window.open(doc.output("bloburl"));
+}; // set the form values of all character form ability scores
+
+
+var rollAbilities = function rollAbilities() {
+  var form = document.querySelector("#characterForm");
+  form.querySelectorAll(".ability_score").forEach(function (abs) {
+    var score = rollForAbilityScore();
+    abs.setAttribute('value', score);
+    abs.value = score;
+  });
+}; // format react component for the character form
+
 
 var CharacterForm = function CharacterForm(props) {
   return /*#__PURE__*/React.createElement("form", {
@@ -212,6 +196,7 @@ var CharacterForm = function CharacterForm(props) {
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_strength"
   }, "Strength: "), /*#__PURE__*/React.createElement("input", {
+    className: "ability_score",
     name: "base_strength",
     type: "number",
     min: "1",
@@ -221,6 +206,7 @@ var CharacterForm = function CharacterForm(props) {
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_dexterity"
   }, "Dexterity: "), /*#__PURE__*/React.createElement("input", {
+    className: "ability_score",
     name: "base_dexterity",
     type: "number",
     min: "1",
@@ -230,6 +216,7 @@ var CharacterForm = function CharacterForm(props) {
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_constitution"
   }, "Constitution: "), /*#__PURE__*/React.createElement("input", {
+    className: "ability_score",
     name: "base_constitution",
     type: "number",
     min: "1",
@@ -239,6 +226,7 @@ var CharacterForm = function CharacterForm(props) {
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_wisdom"
   }, "Wisdom: "), /*#__PURE__*/React.createElement("input", {
+    className: "ability_score",
     name: "base_wisdom",
     type: "number",
     min: "1",
@@ -248,25 +236,33 @@ var CharacterForm = function CharacterForm(props) {
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "base_charisma"
   }, "Charisma: "), /*#__PURE__*/React.createElement("input", {
+    className: "ability_score",
     name: "base_charisma",
     type: "number",
     min: "1",
     max: "20"
   }))), /*#__PURE__*/React.createElement("div", {
     className: "characterForm_Section"
-  }, /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "characterForm_Section_Item"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn",
+    type: "button",
+    id: "rollScoresBtn"
+  }, "Roll Ability Scores")), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
   }), /*#__PURE__*/React.createElement("div", {
     className: "characterForm_Section_Item"
   }, /*#__PURE__*/React.createElement("input", {
-    className: "makeCharacterSubmit",
+    className: "makeCharacterSubmit btn",
     type: "submit",
     action: "/maker",
     value: "Make Character"
   }))));
-};
+}; // renders all of the account's characters
+
 
 var CharacterList = function CharacterList(props) {
   if (props.characters.length === 0) {
@@ -290,7 +286,18 @@ var CharacterList = function CharacterList(props) {
       name: "character",
       method: "POST",
       className: "character"
-    }, /*#__PURE__*/React.createElement("h3", null, "Personal Information"), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "characterNode_Section_Item"
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "hidden",
+      className: "csrfToken",
+      name: "_csrf",
+      value: props.csrf
+    }), /*#__PURE__*/React.createElement("input", {
+      type: "submit",
+      className: "exportToPDFButton",
+      value: "Export to PDF"
+    })), /*#__PURE__*/React.createElement("h3", null, "Personal Information"), /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section"
     }, /*#__PURE__*/React.createElement("div", {
       className: "characterNode_Section_Item"
@@ -344,23 +351,13 @@ var CharacterList = function CharacterList(props) {
       className: "characterNode_Section_Item"
     }, /*#__PURE__*/React.createElement("div", {
       id: "idField"
-    }, "ID: ", character._id)), /*#__PURE__*/React.createElement("div", {
-      className: "characterNode_Section_Item"
-    }, /*#__PURE__*/React.createElement("input", {
-      type: "hidden",
-      className: "csrfToken",
-      name: "_csrf",
-      value: props.csrf
-    }), /*#__PURE__*/React.createElement("input", {
-      type: "submit",
-      className: "exportToPDFButton",
-      value: "Export to PDF"
-    })))));
+    }, "ID: ", character._id)))));
   });
   return /*#__PURE__*/React.createElement("div", {
     className: "characterList"
   }, characterNodes);
-};
+}; // format window for changing passwords
+
 
 var PassChangeWindow = function PassChangeWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
@@ -407,13 +404,110 @@ var PassChangeWindow = function PassChangeWindow(props) {
     type: "submit",
     value: "Confirm Change"
   }));
-};
+}; // format window for visualizing account info
+
+
+var AccountWindow = function AccountWindow(props) {
+  var date = new Date(props.account.createdDate);
+  return /*#__PURE__*/React.createElement("form", {
+    id: "accountForm",
+    className: "mainForm",
+    onSubmit: handleAccountInfo,
+    action: "/changePremiumStatus",
+    method: "POST"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("label", null, "Username: "), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Value"
+  }, props.account.username)), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("label", null, "Created Date: "), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Value"
+  }, date.toDateString(), ", ", date.toLocaleTimeString())), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("label", null, "Premium: "), /*#__PURE__*/React.createElement("input", {
+    className: "mainForm_Value",
+    id: "isPremium",
+    name: "isPremium",
+    type: "checkbox"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    id: "accountChanged",
+    value: "false"
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_csrf",
+    value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "formSubmit",
+    type: "submit",
+    value: "Save"
+  })));
+}; // format account react component
+
+
+var Footer = function Footer(props) {
+  var totalCharacterLevel = 0;
+  props.characters.forEach(function (ch) {
+    return totalCharacterLevel += ch.classLevel;
+  });
+  var len = props.characters.length !== 0 ? props.characters.length : 1;
+  var avgCharacterLevel = totalCharacterLevel / len;
+  return /*#__PURE__*/React.createElement("footer", null, /*#__PURE__*/React.createElement("div", {
+    className: "footer_Section"
+  }, /*#__PURE__*/React.createElement("h3", null, "Data"), /*#__PURE__*/React.createElement("div", {
+    className: "footer_Section_Item"
+  }, /*#__PURE__*/React.createElement("div", null, "Number of Characters: ", props.characters.length)), /*#__PURE__*/React.createElement("div", {
+    className: "footer_Section_Item"
+  }, /*#__PURE__*/React.createElement("div", null, "Average Level: ", Math.round(avgCharacterLevel * 100) / 100))), /*#__PURE__*/React.createElement("div", {
+    className: "footer_Section"
+  }, /*#__PURE__*/React.createElement("h3", null, "Sources"), /*#__PURE__*/React.createElement("div", {
+    className: "footer_Section_Item"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "https://company.wizards.com/",
+    target: "_blank"
+  }, "Wizards of the Coast \xA9")), /*#__PURE__*/React.createElement("div", {
+    className: "footer_Section_Item"
+  }, /*#__PURE__*/React.createElement("a", {
+    href: "https://www.dnd5eapi.co/",
+    target: "_blank"
+  }, "D&D 5e API"), /*#__PURE__*/React.createElement("a", {
+    href: "https://github.com/MrRio/jsPDF",
+    target: "_blank"
+  }, "JS PDF Converter"))));
+}; // set any dynamic form values and render account component
+
+
+var createAccountWindow = function createAccountWindow(csrf) {
+  sendAjax("GET", "/getAccountInfo", null, function (acc) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(AccountWindow, {
+      account: acc,
+      csrf: csrf
+    }), document.querySelector("#content"));
+    var premiumCheckbox = document.querySelector("#isPremium");
+    premiumCheckbox.checked = acc.isPremium;
+    premiumCheckbox.addEventListener("change", function () {
+      document.querySelector("#accountChanged").value = "true";
+    });
+  });
+}; // render password change window
+
 
 var createPassChangeWindow = function createPassChangeWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(PassChangeWindow, {
     csrf: csrf
   }), document.querySelector("#content"));
-};
+}; // render footer component
+
+
+var createFooter = function createFooter(characters) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(Footer, {
+    characters: characters
+  }), document.querySelector("#pageFooter"));
+}; // get any other server data and assign it to then render with the character model data
+
 
 var loadCharactersFromServer = function loadCharactersFromServer(csrf) {
   sendAjax("GET", "/getCharacters", null, function (data) {
@@ -441,11 +535,6 @@ var loadCharactersFromServer = function loadCharactersFromServer(csrf) {
         results[res.name]["con_bonus"] = getDND_Race_AB(results[res.name], "con");
         results[res.name]["wis_bonus"] = getDND_Race_AB(results[res.name], "wis");
         results[res.name]["cha_bonus"] = getDND_Race_AB(results[res.name], "cha");
-        res.languages.forEach(function (lang) {
-          promises.push(sendAjax("GET", "https://www.dnd5eapi.co".concat(lang.url), null, function (langRes) {
-            console.log(JSON.stringify(langRes));
-          }));
-        });
       }));
     }); // load character list after all promises are fulfilled
 
@@ -455,12 +544,21 @@ var loadCharactersFromServer = function loadCharactersFromServer(csrf) {
         dndData: results,
         characters: data.characters
       }), document.querySelector("#characters"));
+      createFooter(data.characters);
+      sendAjax("GET", "/getPremiumStatus", null, function (status) {
+        document.querySelectorAll(".exportToPDFButton").forEach(function (btn) {
+          btn.value += "(Premium Only)";
+          btn.disabled = !status.isPremium;
+        });
+      });
     });
   });
-};
+}; // set any relevant event handlers and render the main content
+
 
 var setup = function setup(csrf) {
   var passChangeButton = document.querySelector("#passChangeButton");
+  var accountInfoButton = document.querySelector("#accountInfoButton");
   var allExportToPDFButtons = document.querySelectorAll(".exportToPDFButton");
   allExportToPDFButtons.forEach(function (btn) {
     btn.addEventListener("click", exportToPDF);
@@ -470,9 +568,16 @@ var setup = function setup(csrf) {
     createPassChangeWindow(csrf);
     return false;
   });
+  accountInfoButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    createAccountWindow(csrf);
+    return false;
+  });
   ReactDOM.render( /*#__PURE__*/React.createElement(CharacterForm, {
     csrf: csrf
   }), document.querySelector("#makeCharacter"));
+  var rollScoresBtn = document.querySelector("#rollScoresBtn");
+  rollScoresBtn.addEventListener("click", rollAbilities);
   loadCharactersFromServer(csrf);
 };
 
@@ -526,7 +631,45 @@ var sendAjax = function sendAjax(type, action, data, success) {
       handleError(messageObj.error);
     }
   });
-};
+}; // Assumes your document using is `pt` units
+// If you're using any other unit (mm, px, etc.) use this gist to translate: https://gist.github.com/AnalyzePlatypus/55d806caa739ba6c2b27ede752fa3c9c
+
+
+function addWrappedText(_ref) {
+  var text = _ref.text,
+      textWidth = _ref.textWidth,
+      doc = _ref.doc,
+      _ref$fontSize = _ref.fontSize,
+      fontSize = _ref$fontSize === void 0 ? 10 : _ref$fontSize,
+      _ref$fontType = _ref.fontType,
+      fontType = _ref$fontType === void 0 ? 'normal' : _ref$fontType,
+      _ref$lineSpacing = _ref.lineSpacing,
+      lineSpacing = _ref$lineSpacing === void 0 ? 7 : _ref$lineSpacing,
+      _ref$xPosition = _ref.xPosition,
+      xPosition = _ref$xPosition === void 0 ? 10 : _ref$xPosition,
+      _ref$initialYPosition = _ref.initialYPosition,
+      initialYPosition = _ref$initialYPosition === void 0 ? 10 : _ref$initialYPosition,
+      _ref$pageWrapInitialY = _ref.pageWrapInitialYPosition,
+      pageWrapInitialYPosition = _ref$pageWrapInitialY === void 0 ? 10 : _ref$pageWrapInitialY;
+  doc.setFontType(fontType);
+  doc.setFontSize(fontSize);
+  var textLines = doc.splitTextToSize(text, textWidth); // Split the text into lines
+
+  var pageHeight = doc.internal.pageSize.height; // Get page height, we'll use this for auto-paging. TRANSLATE this line if using units other than `pt`
+
+  var cursorY = initialYPosition;
+  textLines.forEach(function (lineText) {
+    if (cursorY > pageHeight) {
+      // Auto-paging
+      doc.addPage();
+      cursorY = pageWrapInitialYPosition;
+    }
+
+    doc.text(xPosition, cursorY, lineText);
+    cursorY += lineSpacing;
+  });
+} // gets race ability bonuses given the D&D 5e API race object
+
 
 var getDND_Race_AB = function getDND_Race_AB(raceAPI, ability) {
   var bonus = 0;

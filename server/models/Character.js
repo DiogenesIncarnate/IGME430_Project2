@@ -106,6 +106,7 @@ CharacterSchema.statics.toAPI = (doc) => ({
   classLevel: doc.classLevel,
 });
 
+// finds the characters which have the associated owner id
 CharacterSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),

@@ -1,5 +1,6 @@
 "use strict";
 
+// sends the login form data to the server to login account controller
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
   $("#characterMessage").animate({
@@ -14,7 +15,8 @@ var handleLogin = function handleLogin(e) {
   console.log($("input[name=_csrf]").val());
   sendAjax("POST", $("#loginForm").attr("action"), $("#loginForm").serialize(), redirect);
   return false;
-};
+}; // sends signup form account data to be created in the account controller
+
 
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
@@ -23,18 +25,19 @@ var handleSignup = function handleSignup(e) {
   }, 350);
 
   if ($("username").val() == "" || $("#pass").val() == "" || $("#pass2").val() == "") {
-    handleError("RAWR! All fields are required.");
+    handleError("All fields are required.");
     return false;
   }
 
   if ($("#pass").val() != $("#pass2").val()) {
-    handleError("RAWR! Passwords do not match.");
+    handleError("Passwords do not match.");
     return false;
   }
 
   sendAjax("POST", $("#signupForm").attr("action"), $("#signupForm").serialize(), redirect);
   return false;
-};
+}; // format login window react component
+
 
 var LoginWindow = function LoginWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
@@ -73,7 +76,8 @@ var LoginWindow = function LoginWindow(props) {
     type: "submit",
     value: "Sign in"
   })));
-};
+}; // format signup window react component
+
 
 var SignupWindow = function SignupWindow(props) {
   return /*#__PURE__*/React.createElement("form", {
@@ -83,28 +87,48 @@ var SignupWindow = function SignupWindow(props) {
     action: "/signup",
     method: "POST",
     className: "mainForm"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
   }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "username"
   }, "Username: "), /*#__PURE__*/React.createElement("input", {
+    className: "mainForm_Value",
     id: "user",
     type: "text",
     name: "username",
     placeholder: "Username"
-  }), /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
+    className: "mainForm_Value",
     id: "pass",
     type: "password",
     name: "pass",
     placeholder: "Password"
-  }), /*#__PURE__*/React.createElement("label", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass2"
   }, "Confirm Password: "), /*#__PURE__*/React.createElement("input", {
+    className: "mainForm_Value",
     id: "pass2",
     type: "password",
     name: "pass2",
     placeholder: "Retype Password"
-  }), /*#__PURE__*/React.createElement("input", {
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("label", {
+    htmlFor: "isPremium"
+  }, "\"Purchase\" Premium Account: "), /*#__PURE__*/React.createElement("input", {
+    className: "mainForm_Value",
+    id: "isPremium",
+    name: "isPremium",
+    type: "checkbox"
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "mainForm_Section"
+  }, /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
@@ -112,7 +136,7 @@ var SignupWindow = function SignupWindow(props) {
     className: "formSubmit",
     type: "submit",
     value: "Sign Up"
-  }));
+  })));
 };
 
 var createLoginWindow = function createLoginWindow(csrf) {
@@ -125,7 +149,8 @@ var createSignupWindow = function createSignupWindow(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(SignupWindow, {
     csrf: csrf
   }), document.querySelector("#content"));
-};
+}; // assigns default event handlers and react renders
+
 
 var setup = function setup(csrf) {
   var loginButton = document.querySelector("#loginButton");
@@ -193,7 +218,45 @@ var sendAjax = function sendAjax(type, action, data, success) {
       handleError(messageObj.error);
     }
   });
-};
+}; // Assumes your document using is `pt` units
+// If you're using any other unit (mm, px, etc.) use this gist to translate: https://gist.github.com/AnalyzePlatypus/55d806caa739ba6c2b27ede752fa3c9c
+
+
+function addWrappedText(_ref) {
+  var text = _ref.text,
+      textWidth = _ref.textWidth,
+      doc = _ref.doc,
+      _ref$fontSize = _ref.fontSize,
+      fontSize = _ref$fontSize === void 0 ? 10 : _ref$fontSize,
+      _ref$fontType = _ref.fontType,
+      fontType = _ref$fontType === void 0 ? 'normal' : _ref$fontType,
+      _ref$lineSpacing = _ref.lineSpacing,
+      lineSpacing = _ref$lineSpacing === void 0 ? 7 : _ref$lineSpacing,
+      _ref$xPosition = _ref.xPosition,
+      xPosition = _ref$xPosition === void 0 ? 10 : _ref$xPosition,
+      _ref$initialYPosition = _ref.initialYPosition,
+      initialYPosition = _ref$initialYPosition === void 0 ? 10 : _ref$initialYPosition,
+      _ref$pageWrapInitialY = _ref.pageWrapInitialYPosition,
+      pageWrapInitialYPosition = _ref$pageWrapInitialY === void 0 ? 10 : _ref$pageWrapInitialY;
+  doc.setFontType(fontType);
+  doc.setFontSize(fontSize);
+  var textLines = doc.splitTextToSize(text, textWidth); // Split the text into lines
+
+  var pageHeight = doc.internal.pageSize.height; // Get page height, we'll use this for auto-paging. TRANSLATE this line if using units other than `pt`
+
+  var cursorY = initialYPosition;
+  textLines.forEach(function (lineText) {
+    if (cursorY > pageHeight) {
+      // Auto-paging
+      doc.addPage();
+      cursorY = pageWrapInitialYPosition;
+    }
+
+    doc.text(xPosition, cursorY, lineText);
+    cursorY += lineSpacing;
+  });
+} // gets race ability bonuses given the D&D 5e API race object
+
 
 var getDND_Race_AB = function getDND_Race_AB(raceAPI, ability) {
   var bonus = 0;

@@ -16,8 +16,10 @@
 
 <body>
   <nav><a href="/login"></a>
+    <div class="navlink"><a href="/maker">Home</a></div>
     <div class="navlink"><a href="/logout">Log out</a></div>
     <div class="navlink"><a id="passChangeButton" href="/passChange">Change Password</a></div>
+    <div class="navlink"><a id="accountInfoButton" href="/getAccountInfo">Account</a></div>
   </nav>
   <div id="content">
     <section id="makeCharacter">
@@ -25,9 +27,10 @@
     <section id="characters">
     </section>
     <div id="characterMessage"><img id="speech" src="/assets/img/speech.png" alt="speech box" />
-      <h3><span id="errorMessage"></span></h3><img id="character" src="assets/img/domo.png" alt="domo" />
+      <h3><div id="errorMessage"></div></h3><img id="character" src="assets/img/error_wizard.gif" alt="errImg" />
     </div>
   </div>
+  <div id="pageFooter"></div>
   <script src="/assets/bundle.js"></script>
 </body>
 

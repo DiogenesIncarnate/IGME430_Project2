@@ -1,9 +1,10 @@
+// sends character form data to be added to character models
 const handleCharacter = (e) => {
   e.preventDefault();
 
-  $("characterMessage").animate({ width: "hide" }, 350);
+  $("#characterMessage").animate({ width: "hide" }, 350);
 
-  if ($("characterName").val() == "" || $("#characterAge").val() == "") {
+  if ($("#characterName").val() == "" || $("#characterAge").val() == "") {
     handleError("All fields are required.");
     return false;
   }
@@ -13,13 +14,14 @@ const handleCharacter = (e) => {
     e.target.getAttribute("action"),
     $("#characterForm").serialize(),
     function () {
-      loadCharactersFromServer();
+      loadCharactersFromServer($("#characterForm")._csrf);
     }
   );
 
   return false;
 };
 
+// send new password info to account controller to be updated
 const handlePassChange = (e) => {
   e.preventDefault();
 
@@ -36,7 +38,7 @@ const handlePassChange = (e) => {
   }
 
   if ($("#newPass").val() != $("#newPass2").val()) {
-    handleError("RAWR! Passwords do not match.");
+    handleError("Passwords do not match.");
     return false;
   }
 
@@ -48,52 +50,66 @@ const handlePassChange = (e) => {
   );
 };
 
-// Assumes your document using is `pt` units
-// If you're using any other unit (mm, px, etc.) use this gist to translate: https://gist.github.com/AnalyzePlatypus/55d806caa739ba6c2b27ede752fa3c9c
-function addWrappedText({text, textWidth, doc, fontSize = 10, fontType = 'normal', lineSpacing = 7, xPosition = 10, initialYPosition = 10, pageWrapInitialYPosition = 10}) {
-  doc.setFontType(fontType);
-  doc.setFontSize(fontSize);
-  var textLines = doc.splitTextToSize(text, textWidth); // Split the text into lines
-  var pageHeight = doc.internal.pageSize.height;        // Get page height, we'll use this for auto-paging. TRANSLATE this line if using units other than `pt`
-  var cursorY = initialYPosition;
+// send account info (premium) to be edited
+const handleAccountInfo = (e) => {
+  e.preventDefault();
 
-  textLines.forEach(lineText => {
-    if (cursorY > pageHeight) { // Auto-paging
-      doc.addPage();
-      cursorY = pageWrapInitialYPosition;
-    }
-    doc.text(xPosition, cursorY, lineText);
-    cursorY += lineSpacing;
-  })
-}
+  if (document.querySelector("#accountChanged").value === "true") {
+    sendAjax(
+      "POST",
+      $("#accountForm").attr("action"),
+      $("#accountForm").serialize(),
+      redirect
+    );
+  }
+};
 
+// format and export pdf using JS library
 const exportToPDF = (e) => {
   e.preventDefault();
 
   const character = e.target.closest(".character");
 
   var eh = {
-    '#languages': function (element, renderer) {
+    "#languages": function (element, renderer) {
       return true;
     },
-    '#misc': function (element, renderer) {
+    "#misc": function (element, renderer) {
       return true;
     },
   };
   let docW = 210;
   const doc = new jsPDF([300, docW]);
-  let lMargin = 15, rMargin = 15;
+  let lMargin = 15,
+    rMargin = 15;
   doc.setProperties({
-    title: `CharacterSheet_${character.querySelector("#characterName").textContent.substring(6)}_${character.id}`,
+    title: `CharacterSheet_${character
+      .querySelector("#characterName")
+      .textContent.substring(6)}_${character.id}`,
   });
-  doc.fromHTML(character, lMargin, rMargin, {"elementHandlers": eh});
-  addWrappedText({"text": character.querySelector("#languages").textContent, "doc": doc, "textWidth": (docW - rMargin * 2), "initialYPosition": 100, "xPosition": lMargin});
-  doc.addFont('ArialMS', 'Arial', 'normal');
-  doc.setFont('Arial');
+  doc.fromHTML(character, lMargin, rMargin, { elementHandlers: eh });
+  addWrappedText({
+    text: character.querySelector("#languages").textContent,
+    doc: doc,
+    textWidth: docW - rMargin * 2,
+    initialYPosition: 100,
+    xPosition: lMargin,
+  });
   doc.setFontSize(10);
-  window.open(doc.output('bloburl'));
+  window.open(doc.output("bloburl"));
 };
 
+// set the form values of all character form ability scores
+const rollAbilities = () => {
+  const form = document.querySelector("#characterForm");
+  form.querySelectorAll(".ability_score").forEach((abs) => {
+    let score = rollForAbilityScore();
+    abs.setAttribute('value', score);
+    abs.value = score;
+  });
+};
+
+// format react component for the character form
 const CharacterForm = (props) => {
   return (
     <form
@@ -170,30 +186,65 @@ const CharacterForm = (props) => {
       <div className="characterForm_Section">
         <div className="characterForm_Section_Item">
           <label htmlFor="base_strength">Strength: </label>
-          <input name="base_strength" type="number" min="1" max="20" />
+          <input
+            className="ability_score"
+            name="base_strength"
+            type="number"
+            min="1"
+            max="20"
+          />
         </div>
         <div className="characterForm_Section_Item">
           <label htmlFor="base_dexterity">Dexterity: </label>
-          <input name="base_dexterity" type="number" min="1" max="20" />
+          <input
+            className="ability_score"
+            name="base_dexterity"
+            type="number"
+            min="1"
+            max="20"
+          />
         </div>
         <div className="characterForm_Section_Item">
           <label htmlFor="base_constitution">Constitution: </label>
-          <input name="base_constitution" type="number" min="1" max="20" />
+          <input
+            className="ability_score"
+            name="base_constitution"
+            type="number"
+            min="1"
+            max="20"
+          />
         </div>
         <div className="characterForm_Section_Item">
           <label htmlFor="base_wisdom">Wisdom: </label>
-          <input name="base_wisdom" type="number" min="1" max="20" />
+          <input
+            className="ability_score"
+            name="base_wisdom"
+            type="number"
+            min="1"
+            max="20"
+          />
         </div>
         <div className="characterForm_Section_Item">
           <label htmlFor="base_charisma">Charisma: </label>
-          <input name="base_charisma" type="number" min="1" max="20" />
+          <input
+            className="ability_score"
+            name="base_charisma"
+            type="number"
+            min="1"
+            max="20"
+          />
         </div>
       </div>
       <div className="characterForm_Section">
+        <div className="characterForm_Section_Item">
+          <button className="btn" type="button" id="rollScoresBtn">
+            Roll Ability Scores
+          </button>
+        </div>
         <input type="hidden" name="_csrf" value={props.csrf} />
         <div className="characterForm_Section_Item">
           <input
-            className="makeCharacterSubmit"
+            className="makeCharacterSubmit btn"
             type="submit"
             action="/maker"
             value="Make Character"
@@ -204,6 +255,7 @@ const CharacterForm = (props) => {
   );
 };
 
+// renders all of the account's characters
 const CharacterList = function (props) {
   if (props.characters.length === 0) {
     return (
@@ -228,6 +280,19 @@ const CharacterList = function (props) {
         method="POST"
         className="character"
       >
+        <div className="characterNode_Section_Item">
+              <input
+                type="hidden"
+                className="csrfToken"
+                name="_csrf"
+                value={props.csrf}
+              />
+              <input
+                type="submit"
+                className="exportToPDFButton"
+                value="Export to PDF"
+              />
+            </div>
         <h3>Personal Information</h3>
         <div className="characterNode_Section">
           <div className="characterNode_Section_Item">
@@ -296,29 +361,18 @@ const CharacterList = function (props) {
         <div className="characterNode_Section">
           <div className="characterNode_Section_Item">
             <div>{languages}</div>
-              <div id="languages">{props.dndData[character.race].language_desc}</div>
+            <div id="languages">
+              {props.dndData[character.race].language_desc}
+            </div>
           </div>
         </div>
         <span id="misc">
-        <h3>Miscellaneous</h3>
-        <div className="characterNode_Section">
-          <div className="characterNode_Section_Item">
-            <div id="idField">ID: {character._id}</div>
+          <h3>Miscellaneous</h3>
+          <div className="characterNode_Section">
+            <div className="characterNode_Section_Item">
+              <div id="idField">ID: {character._id}</div>
+            </div>
           </div>
-          <div className="characterNode_Section_Item">
-            <input
-              type="hidden"
-              className="csrfToken"
-              name="_csrf"
-              value={props.csrf}
-            />
-            <input
-              type="submit"
-              className="exportToPDFButton"
-              value="Export to PDF"
-            />
-          </div>
-        </div>
         </span>
       </form>
     );
@@ -327,6 +381,7 @@ const CharacterList = function (props) {
   return <div className="characterList">{characterNodes}</div>;
 };
 
+// format window for changing passwords
 const PassChangeWindow = (props) => {
   return (
     <form
@@ -361,6 +416,97 @@ const PassChangeWindow = (props) => {
   );
 };
 
+// format window for visualizing account info
+const AccountWindow = (props) => {
+  const date = new Date(props.account.createdDate);
+  return (
+    <form
+      id="accountForm"
+      className="mainForm"
+      onSubmit={handleAccountInfo}
+      action="/changePremiumStatus"
+      method="POST"
+    >
+      <div className="mainForm_Section">
+        <label>Username: </label>
+        <div className="mainForm_Value">{props.account.username}</div>
+      </div>
+      <div className="mainForm_Section">
+        <label>Created Date: </label>
+        <div className="mainForm_Value">
+          {date.toDateString()}, {date.toLocaleTimeString()}
+        </div>
+      </div>
+      <div className="mainForm_Section">
+        <label>Premium: </label>
+        <input
+          className="mainForm_Value"
+          id="isPremium"
+          name="isPremium"
+          type="checkbox"
+        />
+      </div>
+      <div className="mainForm_Section">
+        <input type="hidden" id="accountChanged" value="false" />
+        <input type="hidden" name="_csrf" value={props.csrf} />
+        <input className="formSubmit" type="submit" value="Save" />
+      </div>
+    </form>
+  );
+};
+
+// format account react component
+const Footer = (props) => {
+  let totalCharacterLevel = 0;
+  props.characters.forEach(ch => totalCharacterLevel += ch.classLevel);
+  const len = (props.characters.length !== 0) ? props.characters.length : 1;
+  const avgCharacterLevel = totalCharacterLevel / len;
+
+  return (
+    <footer>
+      <div className="footer_Section">
+        <h3>Data</h3>
+        <div className="footer_Section_Item">
+          <div>Number of Characters: {props.characters.length}</div>
+        </div>
+        <div className="footer_Section_Item">
+          <div>Average Level: {Math.round(avgCharacterLevel * 100) / 100}</div>
+        </div>
+      </div>
+      <div className="footer_Section">
+        <h3>Sources</h3>
+        <div className="footer_Section_Item">
+          <a href="https://company.wizards.com/" target="_blank">
+            Wizards of the Coast ©
+          </a>
+        </div>
+        <div className="footer_Section_Item">
+          <a href="https://www.dnd5eapi.co/" target="_blank">
+            D&D 5e API
+          </a>
+          <a href="https://github.com/MrRio/jsPDF" target="_blank">JS PDF Converter</a>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+// set any dynamic form values and render account component
+const createAccountWindow = (csrf) => {
+  sendAjax("GET", "/getAccountInfo", null, (acc) => {
+    ReactDOM.render(
+      <AccountWindow account={acc} csrf={csrf} />,
+      document.querySelector("#content")
+    );
+    const premiumCheckbox = document.querySelector("#isPremium");
+    premiumCheckbox.checked = acc.isPremium;
+    premiumCheckbox.addEventListener("change", () => {
+      document.querySelector("#accountChanged").value = "true";
+    });
+  });
+};
+
+// render password change window
 const createPassChangeWindow = (csrf) => {
   ReactDOM.render(
     <PassChangeWindow csrf={csrf} />,
@@ -368,6 +514,15 @@ const createPassChangeWindow = (csrf) => {
   );
 };
 
+// render footer component
+const createFooter = (characters) => {
+  ReactDOM.render(
+    <Footer characters={characters} />,
+    document.querySelector("#pageFooter")
+  );
+};
+
+// get any other server data and assign it to then render with the character model data
 const loadCharactersFromServer = (csrf) => {
   sendAjax("GET", "/getCharacters", null, (data) => {
     let results = [];
@@ -424,18 +579,6 @@ const loadCharactersFromServer = (csrf) => {
               results[res.name],
               "cha"
             );
-            res.languages.forEach((lang) => {
-              promises.push(
-                sendAjax(
-                  "GET",
-                  `https://www.dnd5eapi.co${lang.url}`,
-                  null,
-                  (langRes) => {
-                    console.log(JSON.stringify(langRes));
-                  }
-                )
-              );
-            });
           }
         )
       );
@@ -451,12 +594,23 @@ const loadCharactersFromServer = (csrf) => {
         />,
         document.querySelector("#characters")
       );
+
+      createFooter(data.characters);
+
+      sendAjax("GET", "/getPremiumStatus", null, (status) => {
+        document.querySelectorAll(".exportToPDFButton").forEach((btn) => {
+          btn.value += "(Premium Only)";
+          btn.disabled = !status.isPremium;
+        });
+      });
     });
   });
 };
 
+// set any relevant event handlers and render the main content
 const setup = function (csrf) {
   const passChangeButton = document.querySelector("#passChangeButton");
+  const accountInfoButton = document.querySelector("#accountInfoButton");
   const allExportToPDFButtons = document.querySelectorAll(".exportToPDFButton");
 
   allExportToPDFButtons.forEach((btn) => {
@@ -467,11 +621,19 @@ const setup = function (csrf) {
     createPassChangeWindow(csrf);
     return false;
   });
+  accountInfoButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    createAccountWindow(csrf);
+    return false;
+  });
 
   ReactDOM.render(
     <CharacterForm csrf={csrf} />,
     document.querySelector("#makeCharacter")
   );
+
+  const rollScoresBtn = document.querySelector("#rollScoresBtn");
+  rollScoresBtn.addEventListener("click", rollAbilities);
 
   loadCharactersFromServer(csrf);
 };
